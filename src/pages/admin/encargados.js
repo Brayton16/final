@@ -10,7 +10,7 @@ export default function EncargadosPage() {
 
     return (
       <div>
-        <button onClick={() => router.push("/admin/dashboard")}>Encargados</button>
+        <button onClick={() => router.push("/admin/dashboard")}>dashboard</button>
         <h1>Gestión de Encargados</h1>
         <p>Esta página está dedicada a la gestión de encargados.</p>
       <RegistrarEncargado />

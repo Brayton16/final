@@ -10,7 +10,7 @@ export default function ProfesoresPage() {
 
     return (
       <div>
-        <button onClick={() => router.push("/admin/dashboard")}>Profesores</button>
+        <button onClick={() => router.push("/admin/dashboard")}>dashboard</button>
         <h1>Gestión de Profesores</h1>
         <p>Esta página está dedicada a la gestión de profesores.</p>
       <RegistrarProfesor />
