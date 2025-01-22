@@ -3,17 +3,23 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-// Rutas
-const cursosRoutes = require("./routes/cursos");
-const estudiantesRoutes = require("./routes/estudiantes");
+// // Rutas
+// const cursosRoutes = require("./routes/cursos");
+// const estudiantesRoutes = require("./routes/estudiantes");
+const cursosRoutes = require("../backend/routes/cursosRoutes");
+const encargadosRoutes = require("../backend/routes/encargadosRoutes");
+const profesoresRoutes = require("../backend/routes/profesorRoutes");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Rutas de la API
+// // Rutas de la API
+// app.use("/api/cursos", cursosRoutes);
+// app.use("/api/estudiantes", estudiantesRoutes);
 app.use("/api/cursos", cursosRoutes);
-app.use("/api/estudiantes", estudiantesRoutes);
+app.use("/api/encargados", encargadosRoutes);
+app.use("/api/profesores", profesoresRoutes);
 
 // Servidor
 const PORT = process.env.PORT || 3000;
