@@ -10,7 +10,7 @@ exports.getEstudiantes = async (req, res) => {
     }
 };
 
-exports.getEstudiante = async (req, res) => {
+exports.getEstudianteById = async (req, res) => {
     try {
         const estudiante = await estudiantesModel.getEstudianteById(req.params.id);
         res.status(200).json(estudiante);
@@ -19,9 +19,11 @@ exports.getEstudiante = async (req, res) => {
     }
 };
 
+//TODO: Cambiar a que reciba el grado por query
 exports.getEstudiantesByGrado = async (req, res) => {
+    const { grado } = req.query;
     try {
-        const estudiantes = await estudiantesModel.getEstudiantesByGrado(req.params.grado);
+        const estudiantes = await estudiantesModel.getEstudiantesByGrado(grado);
         res.status(200).json(estudiantes);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -66,6 +68,8 @@ exports.updateEstudiante = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+//TODO: Si estudiante está en una sección, no se puede eliminar
 
 exports.deleteEstudiante = async (req, res) => {
     try {

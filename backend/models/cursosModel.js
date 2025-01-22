@@ -25,6 +25,8 @@ exports.updateCurso = async (id, data) => {
   return { id, ...data };
 };
 
+
+
 // Eliminar un curso por ID
 exports.deleteCurso = async (id) => {
   await db.collection("cursos").doc(id).delete();

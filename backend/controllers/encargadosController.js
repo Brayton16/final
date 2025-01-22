@@ -19,18 +19,18 @@ exports.getEncargadoById = async (req, res) => {
 };
 
 exports.createEncargado = async (req, res) => {
-  const { nombre, apellido, email, telefono } = req.query;
+  const { nombre, apellido, correo, telefono } = req.query;
   try {
     if(!nombre){
         return res.status(400).json({ error: "El nombre del encargado es requerido" });
     }else if(!apellido){
         return res.status(400).json({ error: "El apellido del encargado es requerido" });
-    }else if(!email){
+    }else if(!correo){
         return res.status(400).json({ error: "El email del encargado es requerido" });
     }else if(!telefono){
         return res.status(400).json({ error: "El telefono del encargado es requerido" });
     }
-    const nuevoEncargado = await encargadosModel.createEncargado({ nombre, apellido, email, telefono });
+    const nuevoEncargado = await encargadosModel.createEncargado({ nombre, apellido, correo, telefono });
     res.status(201).json(nuevoEncargado);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -38,7 +38,7 @@ exports.createEncargado = async (req, res) => {
 };
 
 exports.updateEncargado = async (req, res) => {
-    const { nombre, apellido, email, telefono } = req.query;
+    const { nombre, apellido, correo, telefono } = req.query;
   
     try {
       const id = req.params.id;
@@ -47,7 +47,7 @@ exports.updateEncargado = async (req, res) => {
       const fieldsToUpdate = {};
       if (nombre) fieldsToUpdate.nombre = nombre;
       if (apellido) fieldsToUpdate.apellido = apellido;
-      if (email) fieldsToUpdate.email = email;
+      if (correo) fieldsToUpdate.email = email;
       if (telefono) fieldsToUpdate.telefono = telefono;
   
       // Validar que al menos un campo está presente
@@ -62,5 +62,17 @@ exports.updateEncargado = async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  };
+};
+
+//TODO: No se puede eliminar un encargado si tiene estudiantes asignados
+
+exports.deleteEncargado = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const encargadoEliminado = await encargadosModel.deleteEncargado(id);
+        res.status(200).json(encargadoEliminado);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
   

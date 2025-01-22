@@ -53,6 +53,8 @@ exports.updateProfesor = async (req, res) => {
   }
 };
 
+//Todo: Si el profesor tiene un curso asignado, no se puede eliminar sin reemplazarlo
+
 exports.deleteProfesor = async (req, res) => {
   try {
     const id = req.params.id;

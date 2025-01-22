@@ -46,7 +46,7 @@ exports.asignarEncargadoAEstudiante = async (req, res) => {
         } else if (!idEncargado) {
             return res.status(400).json({ error: "El ID del encargado es requerido" });
         }
-        const estudiante = await administradoresModel.asginarEncargadoAEstudiante(idEstudiante, idEncargado);
+        const estudiante = await administradoresModel.asignarEncargadoAEstudiante(idEstudiante, idEncargado);
         res.status(201).json(estudiante);
     } catch (error) {
         res.status(500).json({ error: error.message });

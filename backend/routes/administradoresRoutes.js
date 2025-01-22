@@ -5,3 +5,5 @@ const administradoresController = require('../controllers/administradoresControl
 router.post('/seccion', administradoresController.crearSeccion);
 router.post('/grupoCurso', administradoresController.crearGrupoCurso);
 router.post('/encargado', administradoresController.asignarEncargadoAEstudiante);
+
+module.exports = router;

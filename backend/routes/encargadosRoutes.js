@@ -7,6 +7,6 @@ router.get("/", encargadosController.getAllEncargados); // Obtener todos los enc
 router.get("/:id", encargadosController.getEncargadoById); // Obtener un encargado por ID
 router.post("/", encargadosController.createEncargado); // Crear un encargado
 router.put("/:id", encargadosController.updateEncargado); // Actualizar un encargado
-//router.delete("/:id", encargadosController.deleteEncargado); // Eliminar un encargado
+router.delete("/:id", encargadosController.deleteEncargado); // Eliminar un encargado
 
 module.exports = router;
