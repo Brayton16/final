@@ -15,7 +15,11 @@ const seccionRoutes = require("../backend/routes/seccionRoutes");
 const grupoCursoRoutes = require("../backend/routes/grupoCursoRoutes");
 
 const app = express();
-app.use(cors());
+app.use(cors(
+  {
+    origin: '*'
+  }
+));
 app.use(bodyParser.json());
 
 // // Rutas de la API

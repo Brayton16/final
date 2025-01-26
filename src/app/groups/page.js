@@ -7,11 +7,9 @@ const GroupsPage = () => {
   const router = useRouter();
   const [profesor, setProfesor] = useState("3zbMujHDpJWAqoYc6RqO");
   // Dummy data for testing
-  const [groups, setGroups] = useState([
-    { id: 1, name: 'Grupo A', subject: 'Matemáticas' },
-    { id: 2, name: 'Grupo B', subject: 'Física' },
-    { id: 3, name: 'Grupo C', subject: 'Química' },
-  ]);
+  const [groups, setGroups] = useState([]);
+  const [groupsTable, setGroupsTable] = useState([]);
+  const [userRole, setuserRole] = useState("user");
 
   useEffect(() => {
     const requestOptions = {
@@ -19,12 +17,24 @@ const GroupsPage = () => {
       redirect: "follow"
     };
     
-    fetch("http://localhost:3000/api/seccion", requestOptions)
+    fetch("http://localhost:3000/api/grupo-curso/grupos/" + profesor, requestOptions)
       .then((response) => response.json())
       .then((result) => { 
         console.log(result)
-      
+        const groupsTable = []
+        result.forEach((group) => {
+          groupsTable.push({
+            materia: group.curso.nombre,
+            id: group.idSeccion,
+            group: group.secciones.nivel + " - " + group.secciones.grupo,
+            idGrupoCurso: group.idGrupoCurso,
+            idProfesor: group.idProfesor
 
+          });
+        });
+        setGroups(result);
+        setGroupsTable(groupsTable);
+        console.log(groupsTable);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -45,22 +55,20 @@ const GroupsPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1  className= {styles.title}>Grupos Asignados</h1>
+      <h1  className= {styles.title}>{userRole === "Admin" ? "Listado de Grupos" : "Grupos Asignados"}</h1>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Nombre</th>
+            <th>Grupo</th>
             <th>Materia</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {groups.map((group) => (
+          {groupsTable.map((group) => (
             <tr key={group.id}>
-              <td>{group.id}</td>
-              <td>{group.name}</td>
-              <td>{group.subject}</td>
+              <td>{group.group}</td>
+              <td>{group.materia}</td>
               <td>
                 <button
                   className={styles.button}
