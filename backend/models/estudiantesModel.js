@@ -12,7 +12,7 @@ exports.getEstudianteById = async (id) => {
 };
 
 exports.getEstudiantesByGrado = async (grado) => {
-  const snapshot = await db.collection("estudiantes").where("grado", "==", parseInt(grado, 10)).get();
+  const snapshot = await db.collection("estudiantes").where("grado", "==", grado).get();
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 

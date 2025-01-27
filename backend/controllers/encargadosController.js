@@ -21,21 +21,39 @@ exports.getEncargadoById = async (req, res) => {
 exports.createEncargado = async (req, res) => {
   const { nombre, apellido, correo, telefono } = req.query;
   try {
-    if(!nombre){
-        return res.status(400).json({ error: "El nombre del encargado es requerido" });
-    }else if(!apellido){
-        return res.status(400).json({ error: "El apellido del encargado es requerido" });
-    }else if(!correo){
-        return res.status(400).json({ error: "El email del encargado es requerido" });
-    }else if(!telefono){
-        return res.status(400).json({ error: "El telefono del encargado es requerido" });
+    // Validación de datos
+    if (!nombre) {
+      return res.status(400).json({ error: "El nombre del encargado es requerido" });
     }
-    const nuevoEncargado = await encargadosModel.createEncargado({ nombre, apellido, correo, telefono });
+    if (!apellido) {
+      return res.status(400).json({ error: "El apellido del encargado es requerido" });
+    }
+    if (!correo) {
+      return res.status(400).json({ error: "El email del encargado es requerido" });
+    }
+    if (!telefono) {
+      return res.status(400).json({ error: "El teléfono del encargado es requerido" });
+    }
+
+    // Generar una contraseña preestablecida
+    const password = `123456`; // Contraseña predefinida (puedes personalizarla)
+
+    // Crear el encargado en Firebase Auth y Firestore
+    const nuevoEncargado = await encargadosModel.createEncargado({
+      nombre,
+      apellido,
+      correo,
+      telefono,
+      password,
+    });
+
     res.status(201).json(nuevoEncargado);
   } catch (error) {
+    console.error("Error al crear el encargado:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.updateEncargado = async (req, res) => {
     const { nombre, apellido, correo, telefono } = req.query;

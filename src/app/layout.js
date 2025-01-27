@@ -1,7 +1,7 @@
-//layout.js
-import  "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
 import AddBootstrap from "@/app/addBootstrap";
-import AdminNavbar from "@/components/navbar";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "EducationTEC",
@@ -11,13 +11,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body >
-        <AddBootstrap/>
-        <AdminNavbar/>
-        <div style={{ paddingLeft: "300px", width: "100%", marginTop: "20px" }}>
-          {children}
-        </div>
-        </body>
+      <body>
+        <AddBootstrap /> {/* Bootstrap adicional si es necesario */}
+        <ToastContainer position="top-right" autoClose={3000} />
+        <main>
+          {children} {/* Aquí se renderizan las páginas fuera de /admin */}
+        </main>
+      </body>
     </html>
   );
 }

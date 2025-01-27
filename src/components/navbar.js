@@ -2,6 +2,8 @@
 
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { auth } from "@/services/firebase";
+import { signOut } from "firebase/auth";
 
 const AdminSidebar = () => {
   const router = useRouter();
@@ -82,10 +84,21 @@ const AdminSidebar = () => {
       </div>
       <button
         className="btn btn-danger w-100"
-        onClick={() => router.push("/")} // Lógica de logout
+        onClick={async () => {
+          try {
+            // Si estás usando Firebase, cierra sesión
+            if (auth.currentUser) {
+              await signOut(auth); // Cierra sesión del usuario
+            }
+            router.push("/"); // Redirige al login o página principal
+          } catch (error) {
+            console.error("Error al cerrar sesión:", error.message);
+          }
+        }}
       >
         Logout
       </button>
+
     </div>
   );
 };
