@@ -20,9 +20,9 @@ export const getProfesorById = async (id) => {
   }
 };
 
-export const createProfesor = async (nombre, apellido, email) => {  
+export const createProfesor = async (nombre, apellido, email, telefono, especialidad) => {  
   try {
-    const response = await apiClient.post(`/profesores?nombre=${nombre}&apellido=${apellido}&email=${email}`);
+    const response = await apiClient.post(`/profesores?nombre=${nombre}&apellido=${apellido}&correo=${email}&telefono=${telefono}&especialidad=${especialidad}`);
     return response.data;
   } catch (error) {
     console.error("Error al crear el profesor:", error);
@@ -30,9 +30,9 @@ export const createProfesor = async (nombre, apellido, email) => {
   }
 };
 
-export const updateProfesor = async (id, nombre, apellido, email) => {
+export const updateProfesor = async (id, nombre, apellido, email, telefono, especialidad) => {
   try {
-    const response = await apiClient.put(`/profesores/${id}?nombre=${nombre}&apellido=${apellido}&email=${email}`);
+    const response = await apiClient.put(`/profesores/${id}?nombre=${nombre}&apellido=${apellido}&correo=${email}&telefono=${telefono}&especialidad=${especialidad}`);
     return response.data;
   } catch (error) {
     console.error("Error al actualizar el profesor:", error);

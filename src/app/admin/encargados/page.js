@@ -8,15 +8,6 @@ import ListarEncargados from "./listar";
 export default function EncargadosPage() {
   const [activeTab, setActiveTab] = useState("registrar"); // Controlar las tabs
 
-  const encargados = [
-    { id: 1, nombre: "Juan Pérez", correo: "juan@example.com" },
-    { id: 2, nombre: "María López", correo: "maria@example.com" },
-  ]; // Lista de encargados (dummy data)
-
-  const handleDelete = (id) => {
-    console.log(`Eliminar encargado con ID: ${id}`);
-  };
-
   const pageStyle = {
     height: "100vh", // Ocupa toda la altura de la ventana
     width: "100%", // Ocupa todo el ancho

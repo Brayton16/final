@@ -18,7 +18,6 @@ const EditarEstudiante = ({ estudiante, onCancel, onSave }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Datos a enviar:", form);
       await updateEstudiante(estudiante.id, form.nombre, form.apellido, form.correo, form.grado);
       toast.success("Estudiante actualizado con éxito");
       onSave(); // Llama a la función para actualizar la lista de estudiantes

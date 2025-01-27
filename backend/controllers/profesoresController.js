@@ -19,14 +19,21 @@ exports.getProfesor = async (req, res) => {
 };
 
 exports.createProfesor = async (req, res) => {
-  const { nombre, apellido } = req.query;
+  const { nombre, apellido, correo, telefono, especialidad } = req.query;
   try {
     if (!nombre ) {
       return res.status(400).json({ error: "El nombre del profesor es requeridos" });
     }else if (!apellido) {
       return res.status(400).json({ error: "El apellido del profesor es requerido" });
+    } else if (!correo) {
+      return res.status(400).json({ error: "El correo del profesor es requerido" });
+    } else if (!telefono) {
+      return res.status(400).json({ error: "El teléfono del profesor es requerido" });
+    } else if (!especialidad) {
+      return res.status(400).json({ error: "La especialidad del profesor es requerida" });
     }
-    const nuevoProfesor = await profesoresModel.createProfesor({ nombre, apellido });
+
+    const nuevoProfesor = await profesoresModel.createProfesor({ nombre, apellido, correo, telefono, especialidad });
     res.status(201).json(nuevoProfesor);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -34,13 +41,16 @@ exports.createProfesor = async (req, res) => {
 };
 
 exports.updateProfesor = async (req, res) => {
-  const { nombre, apellido } = req.query;
+  const { nombre, apellido, correo, telefono, especialidad } = req.query;
   try {
     const id = req.params.id;
     
     const fieldsToUpdate = {};
     if (nombre) fieldsToUpdate.nombre = nombre;
     if (apellido) fieldsToUpdate.apellido = apellido;
+    if (correo) fieldsToUpdate.correo = correo;
+    if (telefono) fieldsToUpdate.telefono = telefono;
+    if (especialidad) fieldsToUpdate.especialidad = especialidad;
 
     if (Object.keys(fieldsToUpdate).length === 0) {
       return res.status(400).json({ error: "No se proporcionaron campos para actualizar" });

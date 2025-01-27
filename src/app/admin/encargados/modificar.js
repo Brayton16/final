@@ -18,7 +18,6 @@ const EditarEncargado = ({ encargado, onCancel, onSave }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Datos a enviar:", form);
       await updateEncargado(encargado.id, form.nombre, form.apellido, form.correo, form.telefono);
       toast.success("Encargado actualizado con éxito");
       onSave(); // Llama a la función para actualizar la lista
