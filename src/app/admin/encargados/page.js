@@ -1,7 +1,9 @@
-import { useRouter } from "next/router";
+"use client";
 
-import RegistrarEncargado from "./encargados/registrar";
-import ModificarEncargado from "./encargados/modificar";
+import { useRouter } from "next/navigation";
+
+import RegistrarEncargado from "./registrar";
+import ModificarEncargado from "./modificar";
 
 
 export default function EncargadosPage() {
@@ -10,7 +12,6 @@ export default function EncargadosPage() {
 
     return (
       <div>
-        <button onClick={() => router.push("/admin/dashboard")}>dashboard</button>
         <h1>Gestión de Encargados</h1>
         <p>Esta página está dedicada a la gestión de encargados.</p>
       <RegistrarEncargado />

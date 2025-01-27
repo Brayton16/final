@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth } from "../services/firebase";
+import AdminNavbar from "@/components/navbar";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,7 +24,6 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("Usuario autenticado:", userCredential.user);
       router.push("/dashboard");
     } catch (err) {
       console.error(err);

@@ -1,6 +1,8 @@
-import { useRouter } from "next/router";
+"use client";
 
-import RegistrarEstudiante from "./estudiantes/registrar";
+import { useRouter } from "next/navigation";
+
+import RegistrarEstudiante from "./registrar";
 
 
 export default function EstudiantesPage() {
@@ -12,7 +14,7 @@ export default function EstudiantesPage() {
         <button onClick={() => router.push("/admin/dashboard")}>Dashboard</button>
         <h1>Gestión de Estudiantes</h1>
         <p>Esta página está dedicada a la gestión de estudiantes.</p>
-      <RegistrarEstudiante />
+        <RegistrarEstudiante />
       </div>
     );
   }

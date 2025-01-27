@@ -1,16 +1,23 @@
+//layout.js
+import  "bootstrap/dist/css/bootstrap.min.css"
+import AddBootstrap from "@/app/addBootstrap";
+import AdminNavbar from "@/components/navbar";
+
+export const metadata = {
+  title: "EducationTEC",
+  description: "Diseño de software verano 2024",
+};
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
-      <head>
-        <title>Mi Proyecto</title>
-        <meta name="description" content="Herramienta de comunicación para administradores y profesores" />
-      </head>
-      <body>
-        {/* Aquí puedes añadir un diseño general */}
-        <div className="container">
-          {children} {/* Este es el contenido dinámico de cada página */}
+    <html lang="en">
+      <body >
+        <AddBootstrap/>
+        <AdminNavbar/>
+        <div style={{ paddingLeft: "300px", width: "100%", marginTop: "20px" }}>
+          {children}
         </div>
-      </body>
+        </body>
     </html>
   );
 }
