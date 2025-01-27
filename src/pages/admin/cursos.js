@@ -10,7 +10,7 @@ export default function CursosPage() {
     return (
       <div>
         <button onClick={() => router.push("/admin/dashboard")}>Dashboard</button>
-        <h1>Gestión de Grupos</h1>
+        <h1>Gestión de Cursos</h1>
         <p>Esta página está dedicada a la creacion de cursos.</p>
      
         <CrearCurso />
