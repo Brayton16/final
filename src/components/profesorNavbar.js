@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { auth } from "@/services/firebase";
 import { signOut } from "firebase/auth";
 
-const AdminSidebar = () => {
+const ProfesorSidebar = () => {
   const router = useRouter();
   const pathname = usePathname(); // Obtiene la ruta actual
 
@@ -54,14 +54,8 @@ const AdminSidebar = () => {
         </div>
         <ul className="list-unstyled">
           {[
-            { path: "/admin/dashboard", label: "Dashboard" },
-            { path: "/admin/profesores", label: "Profesores" },
-            { path: "/admin/estudiantes", label: "Estudiantes" },
-            { path: "/admin/encargados", label: "Encargados" },
-            { path: "/admin/cursos", label: "Cursos" },
-            { path: "/admin/grupos", label: "Grupos" },
-            { path: "/admin/secciones", label: "Secciones" },
-            { path: "/chats/chats", label: "Chats (Beta)" },
+            //{ path: "/profesor/dashboard", label: "Dashboard" },
+            { path: "/profesor/secciones", label: "Secciones" },
           ].map((item) => (
             <li key={item.path}>
               <a
@@ -105,4 +99,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default ProfesorSidebar;
