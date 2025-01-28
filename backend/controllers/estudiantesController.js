@@ -42,8 +42,8 @@ exports.createEstudiante = async (req, res) => {
         }else if(!correo){
             return res.status(400).json({ error: "El correo del estudiante es requerido" });
         }
-
-        const estudiante = await estudiantesModel.createEstudiante({ nombre, apellido, grado, correo });
+        const password = `123456`; // Contraseña predefinida (puedes personalizarla)
+        const estudiante = await estudiantesModel.createEstudiante({ nombre, apellido, grado, correo, password });
         res.status(201).json(estudiante);
     } catch (error) {
         res.status(500).json({ error: error.message });
