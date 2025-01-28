@@ -50,8 +50,13 @@ exports.getConversacionById = async (id) => {
   const conversacionDoc = await db.collection("conversaciones").doc(id).get();
   if (!conversacionDoc.exists) throw new Error("Conversación no encontrada");
 
-  return { id: conversacionDoc.id, ...conversacionDoc.data() };
+  // Obtener los mensajes, si existen
+  const conversacionData = conversacionDoc.data();
+  const mensajes = conversacionData.mensajes || [];
+
+  return { id: conversacionDoc.id, ...conversacionData, mensajes };
 };
+
 
 // Enviar un mensaje dentro de un chat existente
 exports.sendMessage = async (id, mensaje) => {
@@ -60,18 +65,24 @@ exports.sendMessage = async (id, mensaje) => {
 
   if (!conversacionDoc.exists) throw new Error("Conversación no encontrada");
 
+  // Obtener los mensajes existentes, si no existen inicializamos un array vacío
   const mensajes = conversacionDoc.data().mensajes || [];
+
+  // Crear el nuevo mensaje
   const nuevoMensaje = {
-    texto: mensaje.texto,
-    enviadoPor: mensaje.enviadoPor,
+    texto: mensaje.texto,       // El texto del mensaje
+    enviadoPor: mensaje.enviadoPor  // El ID de quien envió el mensaje
   };
 
+  // Agregar el nuevo mensaje al array de mensajes
   await conversacionRef.update({
     mensajes: [...mensajes, nuevoMensaje],
   });
 
+  // Retornar el nuevo mensaje agregado
   return nuevoMensaje;
 };
+
 
 // Crear un nuevo chat
 exports.createConversacion = async (data) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { getConversaciones } from "../../services/chatService";
 import "./chat.css";
 
@@ -9,6 +10,7 @@ export default function Chats() {
   const [conversaciones, setConversaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   // Cargar el userId desde localStorage
   useEffect(() => {
@@ -23,7 +25,6 @@ export default function Chats() {
         try {
           const data = await getConversaciones(userId); 
           setConversaciones(data);
-          //console.log(data);
         } catch (error) {
           setError("Error al cargar las conversaciones");
         } finally {
@@ -60,20 +61,23 @@ export default function Chats() {
     );
   }
 
+  const handleConversacionClick = (id) => {
+    router.push(`/chats/conversacion?id=${id}`); // Redirigir a la página de la conversación pasando el ID por la URL
+  };
+
   return (
     <div className="chats-container">
       <h1>Conversaciones</h1>
       <ul className="conversaciones-list">
         {conversaciones.map((conversacion) => (
-          <li key={conversacion.id} className="conversacion-item">
+          <li key={conversacion.id} className="conversacion-item" onClick={() => handleConversacionClick(conversacion.id)}>
             <div className="conversacion-header">
               <strong>{conversacion.receptorNombre}</strong>
             </div>
             <div className="conversacion-message">
               <p>
                 Último mensaje:{" "}
-                {conversacion.mensajes[conversacion.mensajes.length - 1] ||
-                  "No hay mensajes"}
+                {conversacion.ultimoMensaje || "No hay mensajes"}
               </p>
             </div>
           </li>
