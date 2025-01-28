@@ -41,6 +41,7 @@ export default function AdminDashboard() {
         <button onClick={() => router.push("/admin/estudiantes")}>Estudiantes</button>
         <button onClick={() => router.push("/admin/grupos")}>Grupos</button>
         <button onClick={() => router.push("/admin/cursos")}>Cursos</button>
+        <button onClick={() => router.push("/profesor/cursos")}>Cursos(Vista Profesor)</button>
       </div>
     </div>
   );
