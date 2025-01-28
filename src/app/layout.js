@@ -2,7 +2,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import AddBootstrap from "@/app/addBootstrap";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
 export const metadata = {
   title: "EducationTEC",
   description: "Diseño de software verano 2024",

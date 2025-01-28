@@ -1,3 +1,4 @@
+const e = require("express");
 const db = require("../services/firebase");
 
 exports.getAllSeccion = async () => {
@@ -89,3 +90,17 @@ exports.deleteSeccion = async (id) => {
     throw error;
   }
 };
+
+exports.getSeccionById = async (id) => {
+  try {
+    // Obtener el documento de la colección "seccion" por ID
+    const seccionDoc = await db.collection("seccion").doc(id).get();
+    if (!seccionDoc.exists) {
+      throw new Error("La sección no existe.");
+    }
+    return { id: seccionDoc.id, ...seccionDoc.data() };
+    }catch (error) {
+      console.error("Error al obtener la sección:", error);
+      throw error;
+    }
+  };

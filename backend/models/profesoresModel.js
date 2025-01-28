@@ -11,6 +11,11 @@ exports.getProfesorById = async (id) => {
   return { id: profesorDoc.id, ...profesorDoc.data() };
 };
 
+exports.getProfesoresByEspecialidad = async (especialidad) => {
+  const snapshot = await db.collection("profesores").where("especialidad", "==", especialidad).get();
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
 exports.createProfesor = async (data) => {
   const profesorRef = await db.collection("profesores").add(data);
   return { id: profesorRef.id, ...data };

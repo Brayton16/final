@@ -89,6 +89,7 @@ const CrearSeccion = () => {
     borderRadius: "6px",
     border: "1px solid #d1d5db",
     fontSize: "1rem",
+    width: "100%",
   };
 
   const buttonStyle = {

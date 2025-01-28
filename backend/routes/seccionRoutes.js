@@ -4,7 +4,8 @@ const seccionController = require('../controllers/seccionController');
 
 
 router.get("/", seccionController.getSeccion);
-router.get("/:id", seccionController.getEstudiantesBySeccion);
+router.get("/:id", seccionController.getSeccionById);
+router.get("/estudiantes/:id", seccionController.getEstudiantesBySeccion);
 router.post("/", seccionController.createSeccion);
 router.put("/:id", seccionController.updateSeccion);
 router.delete("/:id", seccionController.deleteSeccion);

@@ -20,6 +20,16 @@ export const getProfesorById = async (id) => {
   }
 };
 
+export const getCursosByEspecialidad = async (especialidad) => {
+  try {
+    const response = await apiClient.get(`/profesores/especialidad/${especialidad}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los profesores por especialidad:", error);
+    throw error;
+  }
+};
+
 export const createProfesor = async (nombre, apellido, email, telefono, especialidad) => {  
   try {
     const response = await apiClient.post(`/profesores?nombre=${nombre}&apellido=${apellido}&correo=${email}&telefono=${telefono}&especialidad=${especialidad}`);

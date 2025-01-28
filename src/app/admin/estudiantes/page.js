@@ -8,8 +8,6 @@ export default function EncargadosPage() {
   const [activeTab, setActiveTab] = useState("registrar"); // Controlar las tabs
 
   const pageStyle = {
-    height: "100vh", // Ocupa toda la altura de la ventana
-    width: "100%", // Ocupa todo el ancho
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#f8f9fa",

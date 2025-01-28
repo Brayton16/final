@@ -18,6 +18,15 @@ exports.getProfesor = async (req, res) => {
   }
 };
 
+export const getProfesoresByEspecialidad = async (req, res) => {
+  try {
+    const profesores = await profesoresModel.getProfesoresByEspecialidad(req.params.especialidad);
+    res.status(200).json(profesores);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.createProfesor = async (req, res) => {
   const { nombre, apellido, correo, telefono, especialidad } = req.query;
   try {

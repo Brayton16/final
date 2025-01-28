@@ -1,22 +1,66 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import CrearGrupo from "./crear";
+import ListarGrupos from "./listar";
 
-import CrearNuevoGrupo from "./crear";
+export default function GrupoPage() {
+  const [activeTab, setActiveTab] = useState("crear"); // Controlar las tabs
 
+  const pageStyle = {
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#f8f9fa",
+  };
 
-export default function CursosPage() {
+  const tabsContainerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    borderBottom: "2px solid #ccc",
+    backgroundColor: "#fff",
+    padding: "1rem 0",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  };
 
-  const router = useRouter();
+  const tabStyle = {
+    padding: "10px 20px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    borderBottom: "3px solid transparent",
+  };
 
-    return (
-      <div>
-        <button onClick={() => router.push("/admin/dashboard")}>Dashboard</button>
-        <h1>Gestión de Grupos</h1>
-        <p>Esta página está dedicada a la gestión de grupos.</p>
-     
-        <CrearNuevoGrupo />
+  const activeTabStyle = {
+    ...tabStyle,
+    borderBottom: "3px solid #f00", // Resalta la tab activa
+  };
+
+  const contentStyle = {
+    flex: 1, // Ocupa todo el espacio disponible debajo de las tabs
+    overflowY: "auto",
+    padding: "0",
+  };
+
+  return (
+    <div style={pageStyle}>
+      <div style={tabsContainerStyle}>
+        <div
+          style={activeTab === "crear" ? activeTabStyle : tabStyle}
+          onClick={() => setActiveTab("crear")}
+        >
+          Crear Grupo
+        </div>
+        <div
+          style={activeTab === "listar" ? activeTabStyle : tabStyle}
+          onClick={() => setActiveTab("listar")}
+        >
+          Lista de grupos
+        </div>
       </div>
-    );
-  }
-  
+
+      <div style={contentStyle}>
+        {activeTab === "crear" && <CrearGrupo />}
+        {activeTab === "listar" && <ListarGrupos/>}
+      </div>
+    </div>
+  );
+}
