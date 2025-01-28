@@ -18,7 +18,7 @@ exports.getProfesor = async (req, res) => {
   }
 };
 
-export const getProfesoresByEspecialidad = async (req, res) => {
+exports.getProfesoresByEspecialidad = async (req, res) => {
   try {
     const profesores = await profesoresModel.getProfesoresByEspecialidad(req.params.especialidad);
     res.status(200).json(profesores);

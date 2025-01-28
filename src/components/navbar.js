@@ -58,7 +58,6 @@ const AdminSidebar = () => {
             { path: "/admin/profesores", label: "Profesores" },
             { path: "/admin/estudiantes", label: "Estudiantes" },
             { path: "/admin/encargados", label: "Encargados" },
-            { path: "/admin/cursos", label: "Cursos" },
             { path: "/admin/grupos", label: "Grupos" },
             { path: "/admin/secciones", label: "Secciones" },
             { path: "/chats/chats", label: "Chats (Beta)" },

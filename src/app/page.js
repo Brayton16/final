@@ -33,7 +33,7 @@ export default function LoginPage() {
           const role = idTokenResult.claims.role;
           console.log("Role:", role);
           if (!role) {
-            router.push("admin/dashboard"); // Redirige al login si no hay un rol asignado
+            router.push("/admin/dashboard"); // Redirige al login si no hay un rol asignado
             return;
           }else{
             if (role === "admin") {
