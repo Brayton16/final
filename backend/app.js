@@ -13,6 +13,7 @@ const estudiantesRoutes = require("../backend/routes/estudiantesRoutes");
 const administradoresRoutes = require("../backend/routes/administradoresRoutes");
 const seccionRoutes = require("../backend/routes/seccionRoutes");
 const grupoCursoRoutes = require("../backend/routes/grupoCursoRoutes");
+const chatsRoutes = require("../backend/routes/chatsRoutes");
 
 const app = express();
 app.use(cors(
@@ -32,6 +33,7 @@ app.use("/api/estudiantes", estudiantesRoutes);
 app.use("/api/administradores", administradoresRoutes);
 app.use("/api/seccion", seccionRoutes);
 app.use("/api/grupo-curso", grupoCursoRoutes);
+app.use("/api/conversaciones", chatsRoutes);
 
 // Servidor
 const PORT = process.env.PORT || 3000;

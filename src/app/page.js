@@ -27,6 +27,7 @@ export default function LoginPage() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
+          localStorage.setItem("userId", user.uid); // Guarda el ID del usuario en el localStorage
           // Obtén los custom claims del token del usuario
           const idTokenResult = await user.getIdTokenResult(true); // 'true' fuerza la actualización del token
           const role = idTokenResult.claims.role;
@@ -76,6 +77,7 @@ export default function LoginPage() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      localStorage.setItem("userId", user.uid); // Guarda el ID del usuario en el localStorage
       const idTokenResult = await user.getIdTokenResult();
       const role = idTokenResult.claims.role;
       if (!role) {
