@@ -51,3 +51,12 @@ export const deleteSeccion = async (id) => {
   }
 }
 
+export const getSeccionesByProfesor= async (id) => {
+  try {
+    const response = await apiClient.get(`/grupo-curso/grupos/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener las secciones del profesor:", error);
+    throw error;
+  }
+}

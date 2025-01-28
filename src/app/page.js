@@ -30,6 +30,7 @@ export default function LoginPage() {
           // Obtén los custom claims del token del usuario
           const idTokenResult = await user.getIdTokenResult(true); // 'true' fuerza la actualización del token
           const role = idTokenResult.claims.role;
+          console.log("Role:", role);
           if (!role) {
             router.push("admin/dashboard"); // Redirige al login si no hay un rol asignado
             return;
@@ -78,6 +79,7 @@ export default function LoginPage() {
       const user = userCredential.user;
       const idTokenResult = await user.getIdTokenResult();
       const role = idTokenResult.claims.role;
+      console.log("Role:", role);
       if (!role) {
         router.push("admin/dashboard"); // Redirige al login si no hay un rol asignado
         return;

@@ -7,7 +7,7 @@ const GroupStudentsPage = () => {
   const router = useRouter();
   const [students, setStudents] = useState([]);
   const [group, setGroup] = useState(null);
-  const [userRole, setuserRole] = useState("user");
+  const [userRole, setuserRole] = useState("Admin");
   const [selectedProfesor, setSelectedProfesor] = useState("");
   const [profesores, setProfesores] = useState([]);
   const [currentProfesor, setCurrentProfesor] = useState(
