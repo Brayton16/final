@@ -1,3 +1,6 @@
+const { auth } = require("../services/firebase"); // Configuración de Firebase
+const { getAuth } = require("firebase-admin/auth"); // SDK Admin para claims
+
 const db = require("../services/firebase");
 
 exports.getAllEncargados = async () => {
@@ -12,9 +15,32 @@ exports.getEncargadoById = async (id) => {
 };
 
 exports.createEncargado = async (data) => {
-  const encargadoRef = await db.collection("encargados").add(data);
-  return { id: encargadoRef.id, ...data };
+  const { correo, password, nombre, apellido, telefono } = data;
+
+  try {
+    // Crear el usuario en Firebase Auth
+    const userRecord = await auth.createUserWithEmailAndPassword(correo, password);
+
+    // Asignar custom claims para el rol "encargado"
+    const adminAuth = getAuth(); // Admin SDK
+    await adminAuth.setCustomUserClaims(userRecord.user.uid, { role: "encargado" });
+
+    // Guardar el encargado en Firestore
+    const encargadoRef = await db.collection("encargados").add({
+      authId: userRecord.user.uid, // Relaciona Firestore con Firebase Auth
+      nombre,
+      apellido,
+      correo,
+      telefono,
+    });
+
+    return { id: encargadoRef.id, ...data, authId: userRecord.user.uid };
+  } catch (error) {
+    console.error("Error al crear el encargado:", error.message);
+    throw error;
+  }
 };
+
 
 exports.updateEncargado = async (id, data) => {
   await db.collection("encargados").doc(id).update(data);

@@ -32,7 +32,7 @@ export const createEncargado = async (nombre, apellido, correo, telefono) => {
 
 export const updateEncargado = async (id, nombre, apellido, correo, telefono) => {
   try {
-    const response = await apiClient.put(`/encargados/${id}?nombre=${nombre}&apellido=${apellido}&correo=${correo}&telefono=${telefono}`);
+    const response = await apiClient.put(`/encargados/${id}?nombre=${nombre}&apellido=${apellido}&email=${correo}&telefono=${telefono}`);
     return response.data;
   } catch (error) {
     console.error("Error al actualizar el encargado:", error);

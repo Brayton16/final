@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack -p 4000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -12,6 +12,7 @@
     "@firebase/auth": "^1.8.2",
     "axios": "^1.7.9",
     "body-parser": "^1.20.3",
+    "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -21,6 +22,12 @@
     "next": "15.1.5",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0",
+    "react-toastify": "^11.0.3",
+    "sweetalert2": "^11.15.10"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10"
   }
 }

@@ -1,6 +1,8 @@
-import { useRouter } from "next/router";
+"use client"
 
-import CrearNuevoGrupo from "./grupos/crear";
+import { useRouter } from "next/navigation";
+
+import CrearNuevoGrupo from "./crear";
 
 
 export default function CursosPage() {

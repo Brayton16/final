@@ -1,15 +1,22 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import AddBootstrap from "@/app/addBootstrap";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
+export const metadata = {
+  title: "EducationTEC",
+  description: "Diseño de software verano 2024",
+};
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
-      <head>
-        <title>Mi Proyecto</title>
-        <meta name="description" content="Herramienta de comunicación para administradores y profesores" />
-      </head>
+    <html lang="en">
       <body>
-        {/* Aquí puedes añadir un diseño general */}
-        <div className="container">
-          {children} {/* Este es el contenido dinámico de cada página */}
-        </div>
+        <AddBootstrap /> {/* Bootstrap adicional si es necesario */}
+        <ToastContainer position="top-right" autoClose={3000} />
+        <main>
+          {children} {/* Aquí se renderizan las páginas fuera de /admin */}
+        </main>
       </body>
     </html>
   );

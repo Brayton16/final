@@ -1,29 +1,36 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../services/firebase";
+"use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
+import { auth } from "../../../services/firebase";
+import AdminNavbar from "@/components/navbar";
 export default function AdminDashboard() {
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        setUser(currentUser);
+        // Obtén el token y verifica su expiración
+        const tokenResult = await getIdTokenResult(currentUser);
+        const now = Date.now() / 1000; // Tiempo actual en segundos
+
+        if (tokenResult.expirationTime < now) {
+          // Si el token ha expirado
+          auth.signOut(); // Cierra sesión
+          router.push("/"); // Redirige al login
+        } else {
+          // Si el token es válido
+          setUser(currentUser); // Guarda el usuario en el estado
+        }
       } else {
         router.push("/"); // Redirige al login si no hay sesión
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();
   }, [router]);
-
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
 
   return (
     <div>
