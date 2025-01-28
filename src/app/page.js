@@ -1,16 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth } from "../services/firebase";
-
+import Swal from "sweetalert2";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const router = useRouter();
+
+  const userUnauthorized = async (role) => {
+    const result = await Swal.fire({
+      title: "Acceso denegado",
+      text: `Al ser ${role} no tienes acceso a esta página.`,
+      icon: "error",
+      showCancelButton: false,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Ok",
+    });
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -26,11 +37,12 @@ export default function LoginPage() {
             if (role === "admin") {
               router.push("/admin/dashboard");
             } else if (role === "encargado") {
-              router.push("/dashboard/encargado");
+              await signOut(auth);
+              
             } else if (role === "profesor") {
               router.push("/dashboard/profesor");
             } else if (role === "estudiante") {
-              router.push("/dashboard/estudiante");
+              await signOut(auth);
             } 
           }
         } catch (error) {
@@ -38,7 +50,7 @@ export default function LoginPage() {
           router.push("/"); // Redirige al login en caso de error
         }
       } else {
-        router.push("admin/dashboard"); // Redirige al login si no hay un usuario autenticado
+        router.push("/"); // Redirige al login si no hay un usuario autenticado
       }
     });
 
@@ -71,11 +83,13 @@ export default function LoginPage() {
         return;
       }
       if (role === "encargado") {
-        router.push("/dashboard/encargado");
+        userUnauthorized(role);
+        await signOut(auth);
       } else if (role === "profesor") {
         router.push("/dashboard/profesor");
       } else if (role === "estudiante") {
-        router.push("/dashboard/estudiante");
+        userUnauthorized(role);
+        await signOut(auth);
       }
     } catch (err) {
       console.error("Error al iniciar sesión:", err);

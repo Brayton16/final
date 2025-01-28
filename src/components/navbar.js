@@ -60,6 +60,7 @@ const AdminSidebar = () => {
             { path: "/admin/encargados", label: "Encargados" },
             { path: "/admin/cursos", label: "Cursos" },
             { path: "/admin/grupos", label: "Grupos" },
+            { path: "/admin/secciones", label: "Secciones" },
           ].map((item) => (
             <li key={item.path}>
               <a

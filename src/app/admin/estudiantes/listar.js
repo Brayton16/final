@@ -6,7 +6,7 @@ import { getEstudiantes, deleteEstudiante, getEstudianteByGrado } from "@/servic
 import { getEncargadoById } from "@/services/encargadosService";
 import EditarEstudiante from "./modificar"; // Componente para editar estudiantes
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
-
+import Swal from "sweetalert2";
 export default function ListarEstudiantes() {
   const [estudiantes, setEstudiantes] = useState([]);
   const [estudianteAEditar, setEstudianteAEditar] = useState(null); // Estudiante seleccionado para editar
@@ -60,15 +60,27 @@ export default function ListarEstudiantes() {
     fetchEstudiantes();
   };
 
-  // Eliminar estudiante
   const handleDelete = async (id) => {
-    try {
-      await deleteEstudiante(id);
-      setEstudiantes(estudiantes.filter((estudiante) => estudiante.id !== id));
-      toast.success("Estudiante eliminado con éxito");
-    } catch (error) {
-      toast.error("Error al eliminar el estudiante.");
-      console.error("Error al eliminar el estudiante:", error.message);
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás deshacer esta acción.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        await deleteEstudiante(id);
+        setEstudiantes(estudiantes.filter((estudiante) => estudiante.id !== id));
+        toast.success("Estudiante eliminado con éxito");
+      } catch (error) {
+        toast.error("Error al eliminar el estudiante.");
+        console.error("Error al eliminar el estudiante:", error.message);
+      }
     }
   };
 

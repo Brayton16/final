@@ -45,3 +45,47 @@ exports.getEstudiantesBySeccion = async (idSeccion) => {
     throw error;
   }
 };
+
+exports.createSeccion = async (grupo, nivel, listaEstudiantes) => {
+  try {
+    // Crear un nuevo documento en la colección "seccion"
+    const seccionRef = await db.collection("seccion").add({
+      grupo,
+      nivel,
+      listaEstudiantes,
+    });
+
+    return { id: seccionRef.id, grupo, nivel, listaEstudiantes };
+  } catch (error) {
+    console.error("Error al crear la sección:", error);
+    throw error;
+  }
+};
+
+exports.updateSeccion = async (id, grupo, nivel, listaEstudiantes) => {
+  try {
+    // Crear un objeto con los campos a actualizar
+    const data = {};
+    if (grupo) data.grupo = grupo;
+    if (nivel) data.nivel = nivel;
+    if (listaEstudiantes) data.listaEstudiantes = listaEstudiantes;
+
+    // Actualizar el documento en la colección "seccion"
+    await db.collection("seccion").doc(id).update(data);
+
+    return { id, ...data };
+  } catch (error) {
+    console.error("Error al actualizar la sección:", error);
+    throw error;
+  }
+};
+
+exports.deleteSeccion = async (id) => {
+  try {
+    // Eliminar el documento de la colección "seccion"
+    await db.collection("seccion").doc(id).delete();
+  } catch (error) {
+    console.error("Error al eliminar la sección:", error);
+    throw error;
+  }
+};

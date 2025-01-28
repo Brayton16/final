@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { getProfesores, deleteProfesor } from "@/services/profesoresService"; // Importar servicios necesarios
 import EditarProfesor from "./modificar"; // Componente para editar profesores
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 export default function ListarProfesores() {
   const [profesores, setProfesores] = useState([]);
@@ -21,15 +22,27 @@ export default function ListarProfesores() {
     }
   };
 
-  // Eliminar profesor
   const handleDelete = async (id) => {
-    try {
-      await deleteProfesor(id);
-      setProfesores(profesores.filter((profesor) => profesor.id !== id));
-      toast.success("Profesor eliminado con éxito");
-    } catch (error) {
-      toast.error("Error al eliminar el profesor.");
-      console.error("Error al eliminar el profesor:", error.message);
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás deshacer esta acción.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        await deleteProfesor(id);
+        setProfesores(profesores.filter((profesor) => profesor.id !== id));
+        toast.success("Profesor eliminado con éxito");
+      } catch (error) {
+        toast.error("Error al eliminar el profesor.");
+        console.error("Error al eliminar el profesor:", error.message);
+      }
     }
   };
 

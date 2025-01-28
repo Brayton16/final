@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { getEncargados, deleteEncargado } from "@/services/encargadosService";
 import EditarEncargado from "./modificar";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
-
+import Swal from "sweetalert2";
 export default function ListarEncargados() {
   const [encargados, setEncargados] = useState([]);
   const [encargadoAEditar, setEncargadoAEditar] = useState(null);
@@ -21,13 +21,26 @@ export default function ListarEncargados() {
   };
 
   const handleDelete = async (id) => {
-    try {
-      await deleteEncargado(id);
-      setEncargados(encargados.filter((encargado) => encargado.id !== id));
-      toast.success("Encargado eliminado con éxito");
-    } catch (error) {
-      toast.error("Error al eliminar el encargado.");
-      console.error("Error al eliminar el encargado:", error.message);
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás deshacer esta acción.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        await deleteEncargado(id);
+        setEncargados(encargados.filter((encargado) => encargado.id !== id));
+        toast.success("Encargado eliminado con éxito");
+      } catch (error) {
+        toast.error("Error al eliminar el encargado.");
+        console.error("Error al eliminar el encargado:", error.message);
+      }
     }
   };
 

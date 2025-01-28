@@ -32,8 +32,8 @@ exports.createProfesor = async (req, res) => {
     } else if (!especialidad) {
       return res.status(400).json({ error: "La especialidad del profesor es requerida" });
     }
-
-    const nuevoProfesor = await profesoresModel.createProfesor({ nombre, apellido, correo, telefono, especialidad });
+    const password = '123456'; // Contraseña predefinida (puedes personalizarla)
+    const nuevoProfesor = await profesoresModel.createProfesor({ nombre, apellido, correo, telefono, especialidad, password });
     res.status(201).json(nuevoProfesor);
   } catch (error) {
     res.status(500).json({ error: error.message });

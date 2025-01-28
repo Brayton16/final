@@ -1,5 +1,5 @@
 const db = require("../services/firebase");
-
+const { getAuth } = require("firebase-admin/auth"); // SDK Admin para claims
 exports.getAllProfesores = async () => {
   const snapshot = await db.collection("profesores").get();
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -16,6 +16,38 @@ exports.createProfesor = async (data) => {
   return { id: profesorRef.id, ...data };
 };
 
+exports.createProfesor = async (data) => {
+  const { nombre, apellido, correo, telefono, especialidad, password } = data;
+
+  try {
+    // Crear el usuario en Firebase Auth usando el SDK Admin
+    const adminAuth = getAuth(); // Admin SDK
+    const userRecord = await adminAuth.createUser({
+      email: correo,
+      password: password,
+      displayName: `${nombre} ${apellido}`,
+    });
+
+
+    await adminAuth.setCustomUserClaims(userRecord.uid, { role: "profesor" });
+
+    // Guardar el profesor en Firestore
+    const profesorRef = await db.collection("profesores").add({
+      nombre,
+      apellido,
+      correo,
+      telefono,
+      especialidad,
+    });
+
+    return { id: profesorRef.id, ...data, authId: userRecord.uid };
+  } catch (error) {
+    console.error("Error al crear el profesor:", error.message);
+    throw error;
+  }
+};
+
+
 exports.updateProfesor = async (id, data) => {
   await db.collection("profesores").doc(id).update(data);
   return { id, ...data };
@@ -24,4 +56,47 @@ exports.updateProfesor = async (id, data) => {
 exports.deleteProfesor = async (id) => {
   await db.collection("profesores").doc(id).delete();
   return { message: "Profesor eliminado", id };
+};
+
+exports.deleteProfesor = async (id) => {
+  try {
+    const profesorDoc = await db.collection("profesores").doc(id).get();
+
+    if (!profesorDoc.exists) {
+      throw new Error("Profesor no encontrado");
+    }
+
+    const profesorData = profesorDoc.data();
+
+    // Verifica si el correo existe en los datos del profesor
+    if (profesorData.correo) {
+      const adminAuth = getAuth(); // Inicializa el Auth del Admin SDK
+      
+      try {
+        // Busca al usuario por correo
+        const userRecord = await adminAuth.getUserByEmail(profesorData.correo);
+
+        // Elimina al usuario del Auth si existe
+        if (userRecord && userRecord.uid) {
+          await adminAuth.deleteUser(userRecord.uid);
+          console.log(`Usuario con correo ${profesorData.correo} eliminado de Firebase Auth`);
+        }
+      } catch (error) {
+        if (error.code === "auth/user-not-found") {
+          console.log(`El usuario con correo ${profesorData.correo} no se encontró en Firebase Auth.`);
+        } else {
+          throw error; // Si es otro error, propágalo
+        }
+      }
+    }
+
+    // Elimina el documento del profesor de Firestore
+    await db.collection("profesores").doc(id).delete();
+    console.log(`Profesor con ID ${id} eliminado de Firestore`);
+
+    return { message: "Profesor eliminado con éxito" };
+  } catch (error) {
+    console.error("Error al eliminar el profesor:", error.message);
+    throw error;
+  }
 };
