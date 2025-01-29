@@ -34,6 +34,16 @@ exports.getGruposBySecion = async (req, res) => {
   }
 };
 
+exports.getGruposByEstudiante = async (req, res) => {
+  const { idEstudiante } = req.params; // Se espera que el idEstudiante sea pasado como parámetro en la URL.
+  try {
+    const grupos = await grupoCursoModel.getGruposByEstudiante(idEstudiante);
+    res.status(200).json(grupos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.actualizarIdProfesor = async (req, res) => {
   const { idGrupoCurso } = req.body; // Se espera que el idGrupoCurso sea pasado en el cuerpo de la solicitud.
   const { nuevoIdProfesor } = req.body; // Se espera que el nuevoIdProfesor también sea pasado en el cuerpo.
