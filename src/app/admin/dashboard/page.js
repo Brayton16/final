@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
 import { auth } from "../../../services/firebase";
 import AdminNavbar from "@/components/navbar";
+
+//TODO: Hacer estadisticas de todo el sistema aqui
+
 export default function AdminDashboard() {
   const [user, setUser] = useState(null);
   const router = useRouter();

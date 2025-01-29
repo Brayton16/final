@@ -17,11 +17,6 @@ exports.getProfesoresByEspecialidad = async (especialidad) => {
 };
 
 exports.createProfesor = async (data) => {
-  const profesorRef = await db.collection("profesores").add(data);
-  return { id: profesorRef.id, ...data };
-};
-
-exports.createProfesor = async (data) => {
   const { nombre, apellido, correo, telefono, especialidad, password } = data;
 
   try {
@@ -33,11 +28,12 @@ exports.createProfesor = async (data) => {
       displayName: `${nombre} ${apellido}`,
     });
 
-
+    // Asignar custom claims para el rol "profesor"
     await adminAuth.setCustomUserClaims(userRecord.uid, { role: "profesor" });
 
-    // Guardar el profesor en Firestore
-    const profesorRef = await db.collection("profesores").add({
+    // Guardar el profesor en Firestore con el UID como ID del documento
+    const profesorRef = db.collection("profesores").doc(userRecord.uid);
+    await profesorRef.set({
       nombre,
       apellido,
       correo,
@@ -45,7 +41,7 @@ exports.createProfesor = async (data) => {
       especialidad,
     });
 
-    return { id: profesorRef.id, ...data, authId: userRecord.uid };
+    return { id: userRecord.uid, ...data };
   } catch (error) {
     console.error("Error al crear el profesor:", error.message);
     throw error;

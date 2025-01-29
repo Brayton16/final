@@ -30,23 +30,25 @@ exports.createEstudiante = async (data) => {
       displayName: `${nombre} ${apellido}`,
     });
 
-
+    // Asignar el rol personalizado al usuario
     await adminAuth.setCustomUserClaims(userRecord.uid, { role: "estudiante" });
 
-    // Guardar el encargado en Firestore
-    const encargadoRef = await db.collection("estudiantes").add({
+    // Guardar el estudiante en Firestore con el uid como ID del documento
+    const estudianteRef = db.collection("estudiantes").doc(userRecord.uid);
+    await estudianteRef.set({
       nombre,
       apellido,
       grado,
       correo,
     });
 
-    return { id: encargadoRef.id, ...data, authId: userRecord.uid };
+    return { id: userRecord.uid, ...data };
   } catch (error) {
-    console.error("Error al crear el encargado:", error.message);
+    console.error("Error al crear el estudiante:", error.message);
     throw error;
   }
 };
+
 
 exports.updateEstudiante = async (id, data) => {
   await db.collection("estudiantes").doc(id).update(data);

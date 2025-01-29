@@ -27,15 +27,16 @@ exports.createEncargado = async (data) => {
     // Asignar custom claims para el rol "encargado"
     await adminAuth.setCustomUserClaims(userRecord.uid, { role: "encargado" });
 
-    // Guardar el encargado en Firestore
-    const encargadoRef = await db.collection("encargados").add({
+    // Guardar el encargado en Firestore con el UID como ID del documento
+    const encargadoRef = db.collection("encargados").doc(userRecord.uid);
+    await encargadoRef.set({
       nombre,
       apellido,
       correo,
       telefono,
     });
 
-    return { id: encargadoRef.id, ...data, authId: userRecord.uid };
+    return { id: userRecord.uid, ...data };
   } catch (error) {
     console.error("Error al crear el encargado:", error.message);
     throw error;
