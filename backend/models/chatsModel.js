@@ -1,6 +1,5 @@
 const db = require("../services/firebase");
 
-// Cargar todas las conversaciones (incluyendo el nombre del interlocutor y el último mensaje)
 exports.getAllConversaciones = async (userId) => {
   // Obtener conversaciones donde el usuario es el emisor
   const emisorSnapshot = await db
@@ -32,7 +31,7 @@ exports.getAllConversaciones = async (userId) => {
 
     // Obtener el último mensaje de la conversación (si existe)
     const ultimoMensaje = conversacion.mensajes && conversacion.mensajes.length > 0
-      ? conversacion.mensajes[conversacion.mensajes.length - 1] // Suponemos que solo quieres el texto del último mensaje
+      ? conversacion.mensajes[conversacion.mensajes.length - 1].texto // Extraer el texto del último mensaje
       : "No hay mensajes";
 
     return {
@@ -45,20 +44,39 @@ exports.getAllConversaciones = async (userId) => {
   return conversaciones;
 };
 
-// Ver una conversación específica (devolver todos los mensajes)
 exports.getConversacionById = async (id) => {
   const conversacionDoc = await db.collection("conversaciones").doc(id).get();
   if (!conversacionDoc.exists) throw new Error("Conversación no encontrada");
 
-  // Obtener los mensajes, si existen
+  // Obtener los datos de la conversación
   const conversacionData = conversacionDoc.data();
+
+  // Obtener el nombre del emisor
+
+  
+
+  const emisorDoc = await db.collection("administradores").doc(conversacionData.idEmisor).get();
+  //const emisorNombre = emisorDoc.exists ? emisorDoc.data().nombre : "Usuario desconocido";
+  const emisorNombre = await obtenerNombrePorUserId(conversacionData.idEmisor);
+
+  // Obtener el nombre del receptor
+  const receptorDoc = await db.collection("estudiantes").doc(conversacionData.idReceptor).get();
+  //const receptorNombre = receptorDoc.exists ? receptorDoc.data().nombre : "Usuario desconocido";
+  const receptorNombre = await obtenerNombrePorUserId(conversacionData.idReceptor);
+
+  // Obtener los mensajes, si existen
   const mensajes = conversacionData.mensajes || [];
 
-  return { id: conversacionDoc.id, ...conversacionData, mensajes };
+  return {
+    id: conversacionDoc.id,
+    ...conversacionData,
+    emisorNombre,
+    receptorNombre,
+    mensajes,
+  };
 };
 
 
-// Enviar un mensaje dentro de un chat existente
 exports.sendMessage = async (id, mensaje) => {
   const conversacionRef = db.collection("conversaciones").doc(id);
   const conversacionDoc = await conversacionRef.get();
@@ -70,8 +88,8 @@ exports.sendMessage = async (id, mensaje) => {
 
   // Crear el nuevo mensaje
   const nuevoMensaje = {
-    texto: mensaje.texto,       // El texto del mensaje
-    enviadoPor: mensaje.enviadoPor  // El ID de quien envió el mensaje
+    emisor: mensaje.enviadoPor, // El ID de quien envió el mensaje
+    texto: mensaje.texto,   // El texto del mensaje
   };
 
   // Agregar el nuevo mensaje al array de mensajes
@@ -84,7 +102,6 @@ exports.sendMessage = async (id, mensaje) => {
 };
 
 
-// Crear un nuevo chat
 exports.createConversacion = async (data) => {
   const { idEmisor, idReceptor, primerMensaje } = data;
 
@@ -93,12 +110,34 @@ exports.createConversacion = async (data) => {
     idReceptor,
     mensajes: [
       {
-        texto: primerMensaje,
-        enviadoPor: idEmisor,
+        emisor: idEmisor,         // El ID de quien envió el mensaje
+        texto: primerMensaje,     // El texto del mensaje
       },
     ],
   };
 
   const conversacionRef = await db.collection("conversaciones").add(nuevaConversacion);
   return { id: conversacionRef.id, ...nuevaConversacion };
+};
+
+const obtenerNombrePorUserId = async (userId) => {
+  // Lista de colecciones a buscar
+  const colecciones = [
+    "administradores", // Primera colección
+    "encargados",        // Segunda colección (puedes agregar más colecciones)
+    "profesores",      // Tercera colección
+    "estudiantes"
+  ];
+
+  // Buscar en cada colección hasta encontrar el nombre
+  for (let coleccion of colecciones) {
+    const doc = await db.collection(coleccion).doc(userId).get();
+    
+    if (doc.exists) {
+      return `${doc.data().nombre} ${doc.data().apellido}`;
+    }
+  }
+
+  // Si no se encontró en ninguna colección
+  return "La funcion cromo (no encontro el nombre)"; 
 };

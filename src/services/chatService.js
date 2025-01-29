@@ -25,7 +25,8 @@ export const getConversacionById = async (id) => {
 // Enviar un mensaje dentro de un chat existente
 export const sendMessage = async (id, texto, enviadoPor) => {
   try {
-    const response = await apiClient.post(`/conversaciones/${id}/mensaje`, { texto, enviadoPor });
+    console.log("Enviando mensaje:", texto);
+const response = await apiClient.post(`/conversaciones/${id}`, { id, texto, enviadoPor });
     return response.data;
   } catch (error) {
     console.error("Error al enviar el mensaje:", error);

@@ -82,3 +82,18 @@ body {
     color: #888;
   }
   
+  .regresar-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .regresar-btn:hover {
+    background-color: #0056b3;
+  }
+  
