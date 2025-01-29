@@ -6,6 +6,64 @@ exports.getAllSeccion = async () => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+exports.getSeccionByEstudiante = async (idEstudiante) => {
+  try {
+    const snapshot = await db.collection("seccion")
+      .where("listaEstudiantes", "array-contains", idEstudiante)
+      .get();
+
+    if (snapshot.empty) {
+      console.log("No se encontró la sección para este estudiante.");
+      return null;
+    }
+
+    const seccion = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data()
+    }))[0]; // Tomamos la primera coincidencia
+
+    const estudiantesRef = db.collection("estudiantes");
+    const estudiantesPromises = seccion.listaEstudiantes.map(async (idEst) => {
+      const estDoc = await estudiantesRef.doc(idEst).get();
+      if (!estDoc.exists) return null;
+
+      const estudianteData = estDoc.data();
+
+      let encargadoNombre = "No asignado";
+      if (estudianteData.idEncargado) {
+        const encargadoDoc = await db.collection("encargados").doc(estudianteData.idEncargado).get();
+        if (encargadoDoc.exists) {
+          const encargadoData = encargadoDoc.data();
+          encargadoNombre = `${encargadoData.nombre} ${encargadoData.apellido}`;
+        }
+      }
+
+      return {
+        id: idEst,
+        nombre: estudianteData.nombre,
+        apellido: estudianteData.apellido,
+        correo: estudianteData.correo,
+        encargado: encargadoNombre
+      };
+    });
+
+    // Ejecutamos todas las promesas de estudiantes
+    const estudiantes = await Promise.all(estudiantesPromises);
+
+    return {
+      idSeccion: seccion.id,
+      grupo: seccion.grupo,
+      nivel: seccion.nivel,
+      estudiantes: estudiantes.filter(est => est !== null) // Filtrar si hay nulos
+    };
+
+  } catch (error) {
+    console.error("Error obteniendo la sección del estudiante:", error);
+    return null;
+  }
+};
+
+
 exports.getEstudiantesBySeccion = async (idSeccion) => {
   try {
     // Obtener el documento de la colección "seccion" por ID
@@ -31,6 +89,7 @@ exports.getEstudiantesBySeccion = async (idSeccion) => {
           _id: estudianteDoc.id,
           nombre: estudianteData.nombre,
           apellido: estudianteData.apellido,
+          correo: estudianteData.correo,
         };
       }
       return null; // Manejar el caso en que un documento no exista

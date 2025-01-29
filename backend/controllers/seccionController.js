@@ -18,6 +18,15 @@ exports.getSeccionById = async (req, res) => {
   }
 };
 
+exports.getSeccionByEstudiante = async (req, res) => {
+  try {
+    const seccion = await seccionModel.getSeccionByEstudiante(req.params.id);
+    res.status(200).json(seccion);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.getEstudiantesBySeccion = async (req, res) => {
   try {
     // Obtener el ID de la sección desde los parámetros de la URL

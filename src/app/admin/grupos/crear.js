@@ -160,7 +160,9 @@ const handleSeccionChange = async (e) => {
     // Día base (domingo de la semana actual)
     const startOfWeek = new Date();
     startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Domingo
-
+    if (gruposSeccion.length === 0) {
+      toast.error("No se encontraron grupos para esta sección.");
+    }
     // Formatear los horarios para FullCalendar
     const eventosSeccion = gruposSeccion.flatMap((grupo) => {
       const [horaInicioH, horaInicioM] = grupo.horaInicio.split(":").map(Number);
