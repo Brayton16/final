@@ -21,7 +21,6 @@
 /build
 
 /backend/node_modules
-/backend/config/config.json
 
 # misc
 .DS_Store
