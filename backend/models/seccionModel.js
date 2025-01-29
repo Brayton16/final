@@ -50,6 +50,7 @@ exports.getEstudiantesBySeccion = async (idSeccion) => {
 exports.createSeccion = async (grupo, nivel, listaEstudiantes) => {
   try {
     // Crear un nuevo documento en la colección "seccion"
+    console.log("Datos a guardar:", { grupo });
     const seccionRef = await db.collection("seccion").add({
       grupo,
       nivel,

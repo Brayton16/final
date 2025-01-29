@@ -49,7 +49,8 @@ exports.createSeccion = async (req, res) => {
     } else if (!listaEstudiantes) {
       return res.status(400).json({ error: "La lista de estudiantes es requerida" });
     }
-    const seccion = await seccionModel.createSeccion({grupo, nivel, listaEstudiantes});
+    console.log(grupo, nivel, listaEstudiantes);
+    const seccion = await seccionModel.createSeccion(grupo, nivel, listaEstudiantes);
     res.status(201).json(seccion);
   } catch (error) {
     res.status(500).json({ error: error.message });
