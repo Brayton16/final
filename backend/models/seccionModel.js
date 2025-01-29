@@ -8,6 +8,7 @@ exports.getAllSeccion = async () => {
 
 exports.getSeccionByEstudiante = async (idEstudiante) => {
   try {
+    console.log("ID del estudiante:", idEstudiante);
     const snapshot = await db.collection("seccion")
       .where("listaEstudiantes", "array-contains", idEstudiante)
       .get();
@@ -21,7 +22,6 @@ exports.getSeccionByEstudiante = async (idEstudiante) => {
       id: doc.id,
       ...doc.data()
     }))[0]; // Tomamos la primera coincidencia
-
     const estudiantesRef = db.collection("estudiantes");
     const estudiantesPromises = seccion.listaEstudiantes.map(async (idEst) => {
       const estDoc = await estudiantesRef.doc(idEst).get();

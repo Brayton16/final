@@ -20,7 +20,7 @@ exports.getSeccionById = async (req, res) => {
 
 exports.getSeccionByEstudiante = async (req, res) => {
   try {
-    const seccion = await seccionModel.getSeccionByEstudiante(req.params.id);
+    const seccion = await seccionModel.getSeccionByEstudiante(req.params.idEstudiante);
     res.status(200).json(seccion);
   } catch (error) {
     res.status(500).json({ error: error.message });
