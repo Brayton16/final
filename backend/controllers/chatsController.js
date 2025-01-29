@@ -30,12 +30,12 @@ exports.getConversacion = async (req, res) => {
   }
 };
 
-// Enviar un mensaje dentro de un chat
 exports.sendMessage = async (req, res) => {
   try {
-    const id = req.params.id;
-    const { texto, enviadoPor } = req.body;
+    console.log("Body recibido:", req.body); // 🔍 Ver qué datos llegan al servidor
 
+    const { id, texto, enviadoPor } = req.body;
+    console.log("ID:", id, "Texto:", texto, "Enviado por:", enviadoPor);
     if (!id) {
       return res.status(400).json({ error: "El ID de la conversación es requerido" });
     }

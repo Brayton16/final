@@ -2,20 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getConversacionById, sendMessage } from "../../services/chatService"; // Asegúrate de tener esta función
-import "./chat.css";
+import { getConversacionById, sendMessage } from "../../services/chatService";
+import "./conversacion.css";
 
 export default function Conversacion() {
   const [conversacion, setConversacion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [mensaje, setMensaje] = useState(""); // Estado para el mensaje a enviar
+  const [mensaje, setMensaje] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const conversacionId = searchParams.get("id"); // Obtener el ID de la conversación desde la URL
+  const conversacionId = searchParams.get("id");
+  const [userId, setUserId] = useState(null);
+  
 
   // Cargar la conversación por ID
   useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
     if (conversacionId) {
       const fetchConversacion = async () => {
         try {
@@ -35,16 +41,14 @@ export default function Conversacion() {
   // Manejar el envío de un nuevo mensaje
   const handleEnviarMensaje = async (e) => {
     e.preventDefault();
-
-    if (mensaje.trim() === "") {
-      return;
-    }
-
+  
+    if (mensaje.trim() === "") return;
+  
     try {
-      // Llamar a la función que maneja el envío del mensaje
-      await sendMessage(conversacionId, mensaje);
-      setMensaje(""); // Limpiar el campo de mensaje
-      // Re-cargar la conversación para mostrar el nuevo mensaje
+  
+      await sendMessage(conversacionId, mensaje, userId); 
+  
+      setMensaje("");
       const updatedConversacion = await getConversacionById(conversacionId);
       setConversacion(updatedConversacion);
     } catch (error) {
@@ -52,6 +56,7 @@ export default function Conversacion() {
       setError("Error al enviar el mensaje");
     }
   };
+  
 
   // Mostrar mensaje de carga o error
   if (loading) {
@@ -80,16 +85,21 @@ export default function Conversacion() {
 
   return (
     <div className="conversacion-container">
-      <h1>Conversación con {conversacion.idEmisor === conversacion.idReceptor ? "Yo" : conversacion.idReceptor}</h1>
+      <button onClick={() => router.push("/chats/chats")} className="regresar-btn">
+        Regresar a chats
+      </button>
+      <h1>{conversacion.receptorNombre}</h1>
       <ul className="mensajes-list">
         {conversacion.mensajes.map((mensaje, index) => (
           <li key={index} className="mensaje-item">
-            <p>{mensaje}</p>
+            <p>
+              {/*<strong>{mensaje.emisor === conversacion.idEmisor ? conversacion.emisorNombre : conversacion.receptorNombre}:</strong> {mensaje.texto}*/}
+              <strong>{mensaje.emisor === conversacion.idEmisor ? "Tu" : conversacion.receptorNombre}:</strong> {mensaje.texto} 
+            </p>
           </li>
         ))}
       </ul>
 
-      {/* 
       <form onSubmit={handleEnviarMensaje} className="mensaje-form">
         <input
           type="text"
@@ -99,7 +109,7 @@ export default function Conversacion() {
           className="mensaje-input"
         />
         <button type="submit" className="mensaje-enviar-btn">Enviar</button>
-      </form>*/}
+      </form>
     </div>
   );
 }
