@@ -68,6 +68,69 @@ exports.getGruposByProfesor = async (idProfesor) => {
   }
 };
 
+exports.getGruposByEstudiante = async (idEstudiante) => {
+  try {
+    // Buscar secciones donde el estudiante está inscrito
+    const seccionesSnapshot = await db
+      .collection("seccion")
+      .where("listaEstudiantes", "array-contains", idEstudiante) // Filtrar donde el estudiante esté inscrito
+      .get();
+    if (seccionesSnapshot.empty) {
+      return [];
+    }
+
+    // Obtener los IDs de las secciones en las que está inscrito el estudiante
+    const secciones = seccionesSnapshot.docs.map((doc) => ({
+      idSeccion: doc.id,
+      ...doc.data(),
+    }));
+    const seccionIds = secciones.map((seccion) => seccion.idSeccion);
+
+    // Buscar grupos en la colección GrupoCurso que correspondan a esas secciones
+    const gruposSnapshot = await db
+      .collection("GrupoCurso")
+      .where("idSeccion", "in", seccionIds) // Filtrar grupos que pertenecen a estas secciones
+      .get();
+
+    if (gruposSnapshot.empty) {
+      return [];
+    }
+
+    // Obtener los datos de los grupos
+    const grupos = gruposSnapshot.docs.map((doc) => ({
+      idGrupoCurso: doc.id,
+      ...doc.data(),
+    }));
+
+    // Consultar cursos para obtener información adicional
+    const cursosPromises = grupos.map((grupo) =>
+      db.collection("cursos").doc(grupo.idCurso).get()
+    );
+
+    const cursosSnapshots = await Promise.all(cursosPromises);
+
+    // Combinar información del grupo con la del curso
+    const resultado = grupos.map((grupo, index) => {
+      const curso = cursosSnapshots[index].exists
+        ? cursosSnapshots[index].data()
+        : null;
+
+      return {
+        ...grupo,
+        curso: curso || {},
+        seccion: secciones.find((sec) => sec.idSeccion === grupo.idSeccion) || {},
+      };
+    });
+
+    return resultado;
+  } catch (error) {
+    console.error("Error obteniendo los grupos del estudiante:", error);
+    throw new Error("Error al obtener los grupos del estudiante.");
+  }
+};
+
+
+
 exports.getGruposBySeccion = async (idSeccion) => {
   try {
     // Consulta inicial a "GrupoCurso"
