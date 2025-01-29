@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa"; // Iconos para los botones
 import RegistrarEncargado from "./registrar";
 import ListarEncargados from "./listar";
+import AsignarEncargado from "./asignar";
 
 export default function EncargadosPage() {
   const [activeTab, setActiveTab] = useState("registrar"); // Controlar las tabs
@@ -63,6 +64,7 @@ export default function EncargadosPage() {
       <div style={contentStyle}>
         {activeTab === "registrar" && <RegistrarEncargado />}
         {activeTab === "listar" && <ListarEncargados/>}
+        {activeTab === "agregar" && <AsignarEncargado />}
       </div>
     </div>
   );

@@ -5,10 +5,13 @@ import { toast } from "react-toastify";
 import { getEncargados, deleteEncargado } from "@/services/encargadosService";
 import EditarEncargado from "./modificar";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { MdOutlineAssignmentInd } from "react-icons/md";
 import Swal from "sweetalert2";
+import AsignarEncargado from "./asignar";
 export default function ListarEncargados() {
   const [encargados, setEncargados] = useState([]);
   const [encargadoAEditar, setEncargadoAEditar] = useState(null);
+  const [encargadoAAsignar, setEncargadoAAsignar] = useState(null);
 
   const fetchEncargados = async () => {
     try {
@@ -50,7 +53,12 @@ export default function ListarEncargados() {
 
   const handleSave = () => {
     setEncargadoAEditar(null); // Vuelve a la lista
+    setEncargadoAAsignar(null); // Vuelve a la lista
     fetchEncargados(); // Refresca la lista
+  };
+
+  const handleAsignar = async (id) => {
+    setEncargadoAAsignar(id); // Guarda el ID del encargado a asignar
   };
 
   useEffect(() => {
@@ -63,6 +71,16 @@ export default function ListarEncargados() {
         encargado={encargadoAEditar}
         onCancel={() => setEncargadoAEditar(null)}
         onSave={handleSave}
+      />
+    );
+  }
+
+  if (encargadoAAsignar) {
+    return (
+      <AsignarEncargado 
+        encargado={encargadoAAsignar}
+        onCancel={() => setEncargadoAAsignar(null)}
+        onSave={handleSave}  
       />
     );
   }
@@ -104,28 +122,40 @@ export default function ListarEncargados() {
               <td style={tdStyle}>{encargado.telefono}</td>
               <td style={tdStyle}>
                 <button
-                      style={{
-                        backgroundColor: "#f8f9fa",
-                        border: "1px solid #ccc",
-                        borderRadius: "5px",
-                        marginRight: "5px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleEdit(encargado)}
-                    >
-                      <FaPencilAlt color="#007bff" />
-                    </button>
-                    <button
-                      style={{
-                        backgroundColor: "#f8d7da",
-                        border: "1px solid #f5c6cb",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleDelete(encargado.id)}
-                    >
-                      <FaTrash color="#dc3545" />
-                    </button>
+                  style={{
+                    backgroundColor: "#125E29",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    marginRight: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleAsignar(encargado)}
+                >
+                  <MdOutlineAssignmentInd color="#ffffff" />
+                </button>
+                <button
+                  style={{
+                    backgroundColor: "#f8f9fa",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    marginRight: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleEdit(encargado)}
+                >
+                  <FaPencilAlt color="#007bff" />
+                </button>
+                <button
+                  style={{
+                    backgroundColor: "#f8d7da",
+                    border: "1px solid #f5c6cb",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleDelete(encargado.id)}
+                >
+                  <FaTrash color="#dc3545" />
+                </button>
               </td>
             </tr>
           ))}

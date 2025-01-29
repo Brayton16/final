@@ -51,7 +51,7 @@ exports.createEstudiante = async (req, res) => {
 };
 
 exports.updateEstudiante = async (req, res) => {
-    const { nombre, apellido, grado, correo } = req.query;
+    const { nombre, apellido, grado, correo, encargado } = req.query;
     try {
         const id = req.params.id;
 
@@ -60,6 +60,7 @@ exports.updateEstudiante = async (req, res) => {
         if (apellido) fieldsToUpdate.apellido = apellido;
         if (grado) fieldsToUpdate.grado = grado;
         if (correo) fieldsToUpdate.correo = correo;
+        if (encargado) fieldsToUpdate.encargado = encargado;
 
         if (Object.keys(fieldsToUpdate).length === 0) {
             return res.status(400).json({ error: "No se proporcionaron campos para actualizar" });
