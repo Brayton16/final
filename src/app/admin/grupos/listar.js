@@ -7,12 +7,14 @@ import { getProfesorById } from "@/services/profesoresService";
 import { getSeccionById } from "@/services/seccionesService";
 import { getCursoById } from "@/services/cursosService";
 import Swal from "sweetalert2";
-import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { FaPencilAlt, FaTrash, FaEye } from "react-icons/fa";
 import  ModificarGrupo  from "./modificar";
+import VerGrupo from "./verGrupos";
 
 export default function ListarGrupos() {
   const [grupos, setGrupos] = useState([]);
   const [grupoAEditar, setGrupoAEditar] = useState(null); // Grupo seleccionado para editar
+  const [grupoAVer, setGrupoAVer] = useState(null); // Grupo seleccionado para ver
 
   // Obtener todos los grupos y asociar información del profesor
   
@@ -65,6 +67,18 @@ export default function ListarGrupos() {
       console.error("Error al cargar el grupo para editar:", error.message);
     }
   };
+  const handleView = async (id) => {
+    try {
+      // Obtener los detalles del grupo por ID
+      const grupo = await getGrupoCursoById(id); // Este servicio debe traer el grupo por su ID
+  
+      // Establecer el grupo a editar (esto muestra el componente `ModificarGrupo`)
+      setGrupoAVer(grupo);
+    } catch (error) {
+      toast.error("Error al cargar los detalles del grupo.");
+      console.error("Error al cargar el grupo para editar:", error.message);
+    }
+  };
   
   // Eliminar grupo
   const handleDelete = async (id) => {
@@ -93,6 +107,7 @@ export default function ListarGrupos() {
   
 
   const handleSave = () => {
+    setGrupoAVer(null);
     setGrupoAEditar(null);
     fetchGrupos(); // Actualizar la lista después de guardar cambios
   };
@@ -138,6 +153,15 @@ export default function ListarGrupos() {
       />
     );
   }
+
+  if (grupoAVer) {
+    return (
+      <VerGrupo
+        grupo={grupoAVer} // Pasar el grupo seleccionado
+        onCancel={() => setGrupoAVer(null)} // Cancelar edición
+      />
+    );
+  }
   
 
 
@@ -166,6 +190,12 @@ export default function ListarGrupos() {
               <td style={tdStyle}>{grupo.seccionDescripcion}</td>
               <td style={tdStyle}>{grupo.cursoNombre}</td>
               <td style={tdStyle}>
+                <button
+                  style={actionButtonStyle}
+                  onClick={() => handleView(grupo.idGrupoCurso)} // Lógica de vista
+                >
+                  <FaEye color="#007bff" />
+                </button>
                 <button
                   style={actionButtonStyle}
                   onClick={() => handleEdit(grupo.idGrupoCurso)} // Lógica de edición
