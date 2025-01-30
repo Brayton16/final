@@ -16,13 +16,13 @@ export default function ListarEstudiantes() {
   const fetchEstudiantes = async () => {
     try {
       const estudiantesData = await getEstudiantes();
-
+      console.log(estudiantesData)
       // Asociar los encargados
       const estudiantesConEncargados = await Promise.all(
         estudiantesData.map(async (estudiante) => {
-          if (estudiante.encargadoId) {
+          if (estudiante.encargado) {
             try {
-              const encargado = await getEncargadoById(estudiante.encargadoId);
+              const encargado = await getEncargadoById(estudiante.encargado);
               estudiante.encargado = `${encargado.nombre} ${encargado.apellido}`;
             } catch {
               estudiante.encargado = "Encargado no encontrado";

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { getEncargadoById } from "@/services/encargadosService";
 import { getEstudiantes, updateEstudiante } from "@/services/estudiantesService";
 
 export default function AsignarEncargado({ encargado, onCancel, onSave }) {
@@ -37,7 +36,7 @@ export default function AsignarEncargado({ encargado, onCancel, onSave }) {
       return;
     }
     try {
-      await updateEstudiante(estudianteSeleccionado.id, idEncargado);
+      await updateEstudiante(estudianteSeleccionado.id, "", "", "", "", encargado.id);
       toast.success("Encargado asignado con éxito");
       setEstudianteSeleccionado(null);
       onSave && onSave();
