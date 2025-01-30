@@ -53,21 +53,24 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
+
 // Crear un nuevo chat
 exports.createConversacion = async (req, res) => {
   try {
-    const { idEmisor, idReceptor, primerMensaje } = req.body;
-
+    console.log("Cuerpo de la solicitud:", req.body);
+    const { idEmisor, idReceptor } = req.body;
+    console.log("Emisor:", idEmisor, "Receptor:", idReceptor, "En createConversacion");
     if (!idEmisor || !idReceptor) {
       return res.status(400).json({ error: "El ID del emisor y el receptor son requeridos" });
     }
-    if (!primerMensaje) {
-      return res.status(400).json({ error: "El primer mensaje es requerido" });
-    }
 
-    const nuevaConversacion = await conversacionesModel.createConversacion({ idEmisor, idReceptor, primerMensaje });
+    const data = {
+      idEmisor,
+      idReceptor,}
+
+    const nuevaConversacion = await conversacionesModel.createConversacion(data);
     res.status(201).json(nuevaConversacion);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ "Sitio":"createConversacion controller" , error: error.message });
   }
 };

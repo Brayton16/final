@@ -6,12 +6,19 @@ import { getEncargados, deleteEncargado } from "@/services/encargadosService";
 import EditarEncargado from "./modificar";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { MdOutlineAssignmentInd } from "react-icons/md";
+import { LuMessageCirclePlus } from "react-icons/lu";
 import Swal from "sweetalert2";
 import AsignarEncargado from "./asignar";
+import {createConversacion} from '../../../services/chatService';
+import { useRouter } from "next/navigation"; 
+
 export default function ListarEncargados() {
   const [encargados, setEncargados] = useState([]);
   const [encargadoAEditar, setEncargadoAEditar] = useState(null);
   const [encargadoAAsignar, setEncargadoAAsignar] = useState(null);
+  const [encargadoAEscribir, setEncargadoAEscribir] = useState(null);
+
+  const router = useRouter();
 
   const fetchEncargados = async () => {
     try {
@@ -54,11 +61,37 @@ export default function ListarEncargados() {
   const handleSave = () => {
     setEncargadoAEditar(null); // Vuelve a la lista
     setEncargadoAAsignar(null); // Vuelve a la lista
+    setEncargadoAEscribir(null); // Vuelve a la lista
     fetchEncargados(); // Refresca la lista
   };
 
   const handleAsignar = async (id) => {
     setEncargadoAAsignar(id); // Guarda el ID del encargado a asignar
+  };
+
+  const handleEscribir = async (encargado) => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      toast.error("No se encontró el usuario actual.");
+      return;
+    }
+
+    const encargadoId = encargado.id;
+    if (!encargadoId) {
+      toast.error("No se encontró el ID del encargado.");
+      return;
+    }
+    
+    try  {
+      console.log("Creando conversación entre:", userId, encargadoId);
+      const conversacion = await createConversacion(userId, encargadoId);
+      console.log("Conversación creada:", conversacion);
+      router.push(`/chats/conversacion?id=${conversacion.id}`);
+    }
+    catch (error) {
+      toast.error("Error al cargar la conversación.");
+      console.error("Error al cargar la conversación:", error.message);
+    }
   };
 
   useEffect(() => {
@@ -75,15 +108,7 @@ export default function ListarEncargados() {
     );
   }
 
-  if (encargadoAAsignar) {
-    return (
-      <AsignarEncargado 
-        encargado={encargadoAAsignar}
-        onCancel={() => setEncargadoAAsignar(null)}
-        onSave={handleSave}  
-      />
-    );
-  }
+
 
   const tableStyle = {
     width: "100%",
@@ -155,6 +180,18 @@ export default function ListarEncargados() {
                   onClick={() => handleDelete(encargado.id)}
                 >
                   <FaTrash color="#dc3545" />
+                </button>
+                <button
+                  style={{
+                    backgroundColor: "#f8f9fa",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleEscribir(encargado)}
+                  
+                >
+                <LuMessageCirclePlus />
                 </button>
               </td>
             </tr>

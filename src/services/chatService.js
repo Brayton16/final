@@ -35,9 +35,10 @@ const response = await apiClient.post(`/conversaciones/${id}`, { id, texto, envi
 };
 
 // Crear un nuevo chat
-export const createConversacion = async (idEmisor, idReceptor, primerMensaje) => {
+export const createConversacion = async (idEmisor, idReceptor) => {
   try {
-    const response = await apiClient.post(`/conversaciones`, { idEmisor, idReceptor, primerMensaje });
+    const data = { idEmisor, idReceptor };
+    const response = await apiClient.post(`/conversaciones`, { idEmisor, idReceptor });
     return response.data;
   } catch (error) {
     console.error("Error al crear la conversación:", error);

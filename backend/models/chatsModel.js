@@ -103,22 +103,18 @@ exports.sendMessage = async (id, mensaje) => {
 
 
 exports.createConversacion = async (data) => {
-  const { idEmisor, idReceptor, primerMensaje } = data;
+  const { idEmisor, idReceptor } = data;
 
   const nuevaConversacion = {
     idEmisor,
     idReceptor,
-    mensajes: [
-      {
-        emisor: idEmisor,         // El ID de quien envió el mensaje
-        texto: primerMensaje,     // El texto del mensaje
-      },
-    ],
+    mensajes: [],
   };
 
   const conversacionRef = await db.collection("conversaciones").add(nuevaConversacion);
-  return { id: conversacionRef.id, ...nuevaConversacion };
+  return { id: conversacionRef.id};
 };
+
 
 const obtenerNombrePorUserId = async (userId) => {
   // Lista de colecciones a buscar
@@ -141,3 +137,28 @@ const obtenerNombrePorUserId = async (userId) => {
   // Si no se encontró en ninguna colección
   return "La funcion cromo (no encontro el nombre)"; 
 };
+
+{/*
+exports.createConversacion = async (emisorId, receptorId) => {
+  const q = query(
+    collection(db, "conversaciones"),
+    where("idEmisor", "in", [emisorId, receptorId]),
+    where("idReceptor", "in", [emisorId, receptorId])
+  );
+
+  const snapshot = await getDocs(q);
+  if (!snapshot.empty) {
+    return snapshot.docs[0].id; // Retorna solo el ID si ya existe
+  }
+
+  // Si no existe, crearla
+  const nuevaConversacion = {
+    idEmisor: emisorId,
+    idReceptor: receptorId,
+    mensajes: [],
+  };
+
+  const docRef = await addDoc(collection(db, "conversaciones"), nuevaConversacion);
+  return docRef.id; // Retorna el ID de la nueva conversación
+};
+*/}
