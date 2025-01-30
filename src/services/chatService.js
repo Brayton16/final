@@ -38,7 +38,7 @@ const response = await apiClient.post(`/conversaciones/${id}`, { id, texto, envi
 export const createConversacion = async (idEmisor, idReceptor) => {
   try {
     const data = { idEmisor, idReceptor };
-    const response = await apiClient.post(`/conversaciones`, { idEmisor, idReceptor });
+    const response = await apiClient.post(`/conversaciones/`, { idEmisor, idReceptor });
     return response.data;
   } catch (error) {
     console.error("Error al crear la conversación:", error);
