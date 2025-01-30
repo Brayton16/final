@@ -8,7 +8,6 @@ exports.getAllSeccion = async () => {
 
 exports.getSeccionByEstudiante = async (idEstudiante) => {
   try {
-    console.log("ID del estudiante:", idEstudiante);
     const snapshot = await db.collection("seccion")
       .where("listaEstudiantes", "array-contains", idEstudiante)
       .get();
@@ -30,8 +29,8 @@ exports.getSeccionByEstudiante = async (idEstudiante) => {
       const estudianteData = estDoc.data();
 
       let encargadoNombre = "No asignado";
-      if (estudianteData.idEncargado) {
-        const encargadoDoc = await db.collection("encargados").doc(estudianteData.idEncargado).get();
+      if (estudianteData.encargado) {
+        const encargadoDoc = await db.collection("encargados").doc(estudianteData.encargado).get();
         if (encargadoDoc.exists) {
           const encargadoData = encargadoDoc.data();
           encargadoNombre = `${encargadoData.nombre} ${encargadoData.apellido}`;
