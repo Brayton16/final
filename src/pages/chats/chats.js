@@ -56,7 +56,7 @@ export default function Chats() {
   if (!conversaciones.length) {
     return (
       <div className="no-conversaciones">
-              <button onClick={() => router.push("/admin/dashboard")} className="regresar-btn">
+              <button onClick={() => router.push("/admin/dashboard")} className="regresar-btn"> {/* Esta es la madre mas insegura del mundo, debe haber un modo de fixearlo */}
         Regresar 
       </button>
         <p>No tienes conversaciones aún.</p>
