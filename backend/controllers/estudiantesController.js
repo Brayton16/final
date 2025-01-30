@@ -19,6 +19,15 @@ exports.getEstudianteById = async (req, res) => {
     }
 };
 
+exports.getEstudiantesByEncargado = async (req, res) => {
+    try {
+        const estudiantes = await estudiantesModel.getEstudiantesByEncargado(req.params.idEncargado);
+        res.status(200).json(estudiantes);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 //TODO: Cambiar a que reciba el grado por query
 exports.getEstudiantesByGrado = async (req, res) => {
     const { grado } = req.query;

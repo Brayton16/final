@@ -17,6 +17,11 @@ exports.getEstudiantesByGrado = async (grado) => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+exports.getEstudiantesByEncargado = async (encargadoId) => {
+  const snapshot = await db.collection("estudiantes").where("encargado", "==", encargadoId).get();
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
 
 exports.createEstudiante = async (data) => {
   const { nombre, apellido, grado, correo, password } = data;
