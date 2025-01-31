@@ -79,6 +79,7 @@ export default function Conversacion() {
     return (
       <div className="no-conversacion">
         <p>La conversación no existe.</p>
+        <button onClick={() => router.back()}>Volver atrás</button>
       </div>
     );
   }
@@ -88,6 +89,7 @@ export default function Conversacion() {
       <button onClick={() => router.push("/chats/chats")} className="regresar-btn">
         Regresar a chats
       </button>
+      <button onClick={() => router.back()}>Volver atrás</button>
       <h1>{conversacion.receptorNombre}</h1>
       <ul className="mensajes-list">
         {conversacion.mensajes.map((mensaje, index) => (
