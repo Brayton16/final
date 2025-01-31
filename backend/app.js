@@ -16,6 +16,7 @@ const grupoCursoRoutes = require("../backend/routes/grupoCursoRoutes");
 const chatsRoutes = require("../backend/routes/chatsRoutes");
 const asignacionesRoutes = require("../backend/routes/asignacionesRoutes");
 const entregasRoutes = require("../backend/routes/entregasRoutes");
+const anunciosRoutes = require("../backend/routes/anunciosRoutes");
 
 const app = express();
 app.use(cors(
@@ -38,6 +39,7 @@ app.use("/api/grupo-curso", grupoCursoRoutes);
 app.use("/api/conversaciones", chatsRoutes);
 app.use("/api/asignaciones", asignacionesRoutes)
 app.use("/api/entregas", entregasRoutes)
+app.use("/api/anuncios", anunciosRoutes)
 
 // Servidor
 const PORT = process.env.PORT || 3000;
