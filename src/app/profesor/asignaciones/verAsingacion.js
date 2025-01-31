@@ -228,7 +228,7 @@ const VerAsignacion = ({ asignacion, onCancel }) => {
                   <td style={tdStyle}>{new Date(entrega.fechaEntrega).toLocaleString()}</td>
                   <td style={tdStyle}>{entrega.estado}</td>
                   <td style={tdStyle}>
-                    <a href={entrega.archivos[0]} target="_blank" rel="noopener noreferrer">📂 Descargar</a>
+                    <a href={entrega.archivos} target="_blank" rel="noopener noreferrer">Descargar</a>
                   </td>
                   <td style={tdStyle}>
                   <input
