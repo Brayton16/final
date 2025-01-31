@@ -35,14 +35,15 @@ exports.obtenerAnunciosByProfesor = async (idProfesor) => {
     return anuncios;
 };
 
-exports.crearAnuncio = async (idGrupoCurso, titulo, mensaje, fechaPublicacion, auto, importancia) => {
+exports.crearAnuncio = async (idGrupoCurso, idProfesor, titulo, mensaje, fechaPublicacion, auto, importancia) => {
     const docRef = await db.collection("anuncios").add({
         idGrupoCurso,
+        idProfesor,
         titulo,
         mensaje,
         fechaPublicacion,
         auto,
         importancia,
     });
-    return { id: docRef.id, idGrupoCurso, titulo, mensaje, fechaPublicacion, auto, importancia };
+    return { id: docRef.id, idGrupoCurso, idProfesor, titulo, mensaje, fechaPublicacion, auto, importancia };
 };

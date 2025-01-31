@@ -20,6 +20,7 @@ export default function ListarAnuncios() {
         }
         setProfesorId(storedUserId);
         const anunciosData = await obtenerAnunciosByProfesor(storedUserId);
+        console.log(anunciosData);
         setAnuncios(anunciosData.sort((a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion)));
       } catch (error) {
         toast.error("Error al cargar los anuncios.");

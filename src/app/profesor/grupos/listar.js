@@ -74,6 +74,7 @@ export default function ListarGrupos() {
       try {
         const nuevoAnuncio = {
           idGrupoCurso: grupo.idGrupoCurso,
+          idProfesor: profesor.idProfesor,
           titulo: formValues.titulo,
           mensaje: formValues.mensaje,
           fechaPublicacion: new Date().toISOString(),
