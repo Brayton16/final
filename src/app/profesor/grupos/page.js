@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-// import ListarGrupos from "./listar";
+import ListarGrupos from "./listar";
 // import AnunciosGrupo from "./anuncios";
 
 export default function GrupoPage() {
@@ -58,8 +58,8 @@ export default function GrupoPage() {
       </div>
 
       <div style={contentStyle}>
-        {/* {activeTab === "listar" && <ListarGrupos />}
-        {activeTab === "anuncios" && <AnunciosGrupo />} */}
+        {activeTab === "listar" && <ListarGrupos />}
+        {/* {activeTab === "anuncios" && <AnunciosGrupo />} */}
       </div>
     </div>
   );
