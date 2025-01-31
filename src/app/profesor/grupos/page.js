@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ListarGrupos from "./listar";
-// import AnunciosGrupo from "./anuncios";
+import ListarAnuncios from "./anuncios";
 
 export default function GrupoPage() {
   const [activeTab, setActiveTab] = useState("listar"); // Iniciar en la pestaña de listar
@@ -59,7 +59,7 @@ export default function GrupoPage() {
 
       <div style={contentStyle}>
         {activeTab === "listar" && <ListarGrupos />}
-        {/* {activeTab === "anuncios" && <AnunciosGrupo />} */}
+        {activeTab === "anuncios" && <ListarAnuncios />}
       </div>
     </div>
   );

@@ -37,12 +37,12 @@ exports.obtenerAnunciosByProfesor = async (req, res) => {
 };
 
 exports.crearAnuncio = async (req, res) => {
-    const { idGrupoCurso, titulo, mensaje, fechaPublicacion, auto, importancia } = req.body;
+    const { idGrupoCurso, titulo, mensaje, fechaPublicacion, autor, importancia } = req.body;
     try {
-        if(!idGrupoCurso || !titulo || !mensaje || !fechaPublicacion || !auto || !importancia) {
+        if(!idGrupoCurso || !titulo || !mensaje || !fechaPublicacion || !autor || !importancia) {
             return res.status(400).json({ error: "Faltan campos obligatorios" });
         }
-        const anuncio = await anunciosModel.crearAnuncio(idGrupoCurso, titulo, mensaje, fechaPublicacion, auto, importancia);
+        const anuncio = await anunciosModel.crearAnuncio(idGrupoCurso, titulo, mensaje, fechaPublicacion, autor, importancia);
         res.status(201).json(anuncio);
     }catch (error) {
         res.status(500).json({ error: error.message });
