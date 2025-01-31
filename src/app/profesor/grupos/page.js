@@ -4,7 +4,13 @@ import { useState } from "react";
 import ListarGrupos from "./listar";
 // import AnunciosGrupo from "./anuncios";
 
+// Importar el Hook de verificación de roles
+import useCheckPermissions from "@/hooks/useCheckPermissions";
+
 export default function GrupoPage() {
+  // Llama al Hook de verificación de roles
+  useCheckPermissions(["profesor"]);
+
   const [activeTab, setActiveTab] = useState("listar"); // Iniciar en la pestaña de listar
 
   const pageStyle = {

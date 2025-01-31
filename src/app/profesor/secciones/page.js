@@ -4,7 +4,13 @@ import { useState } from "react";
 import CrearSeccion from "./crear";
 import ListarSecciones from "./listar";
 
+// Importar el Hook de verificación de roles
+import useCheckPermissions from "@/hooks/useCheckPermissions";
+
 export default function SeccionesPage() {
+    // Llama al Hook de verificación de roles
+    useCheckPermissions(["profesor"]);
+    
   const [activeTab, setActiveTab] = useState("listar"); // Controlar las tabs
 
   const pageStyle = {

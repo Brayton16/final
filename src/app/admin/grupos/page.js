@@ -4,7 +4,14 @@ import { useState } from "react";
 import CrearGrupo from "./crear";
 import ListarGrupos from "./listar";
 
+// Importar el Hook de verificación de roles
+import useCheckPermissions from "@/hooks/useCheckPermissions";
+
 export default function GrupoPage() {
+
+  // Llama al Hook de verificación de roles
+  useCheckPermissions(["admin"]);
+
   const [activeTab, setActiveTab] = useState("crear"); // Controlar las tabs
 
   const pageStyle = {

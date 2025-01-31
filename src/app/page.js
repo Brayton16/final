@@ -24,16 +24,24 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
+    const userData = {};
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
           localStorage.setItem("userId", user.uid); // Guarda el ID del usuario en el localStorage
+          userData.uid = user.uid;
           // Obtén los custom claims del token del usuario
           const idTokenResult = await user.getIdTokenResult(true); // 'true' fuerza la actualización del token
           const role = idTokenResult.claims.role;
-          console.log("Role:", role);
+          if (role) {
+            userData.role = role;
+          }else{
+            userData.role = "user";
+          }
+          localStorage.setItem('userData', JSON.stringify(userData));
+          
           if (!role) {
-            router.push("/admin/dashboard"); // Redirige al login si no hay un rol asignado
+            router.push("/"); // Redirige al login si no hay un rol asignado
             return;
           }else{
             if (role === "admin") {
