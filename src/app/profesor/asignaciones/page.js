@@ -4,8 +4,15 @@ import { useState } from "react";
 import CrearAsignacion from "./crear";
 import ListarAsignaciones from "./listar";
 
+// Importar el Hook de verificación de roles
+import useCheckPermissions from "@/hooks/useCheckPermissions";
+
 export default function AsignacionesPage() {
+  // Llama al Hook de verificación de roles
+  useCheckPermissions(["profesor"]);
+  
   const [activeTab, setActiveTab] = useState("crear");
+
 
   const pageStyle = {
     display: "flex",

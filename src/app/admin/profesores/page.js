@@ -4,7 +4,14 @@ import { useState } from "react";
 import RegistrarProfesor from "./registrar";
 import ListarProfesores from "./listar";
 
+// Importar el Hook de verificación de roles
+import useCheckPermissions from "@/hooks/useCheckPermissions";
+
 export default function EncargadosPage() {
+
+  // Llama al Hook de verificación de roles
+  useCheckPermissions(["admin"]); 
+
   const [activeTab, setActiveTab] = useState("registrar"); // Controlar las tabs
 
   const pageStyle = {

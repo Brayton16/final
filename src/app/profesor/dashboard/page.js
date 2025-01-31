@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
 import { auth } from "../../../services/firebase";
 import AdminNavbar from "@/components/navbar";
+
+// Importar el Hook de verificación de roles
+import useCheckPermissions from "@/hooks/useCheckPermissions";
+
 export default function AdminDashboard() {
+  // Llama al Hook de verificación de roles
+  useCheckPermissions(["profesor"]);
+
   const [user, setUser] = useState(null);
   const router = useRouter();
 
