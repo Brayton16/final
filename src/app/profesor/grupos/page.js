@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ListarGrupos from "./listar";
-// import AnunciosGrupo from "./anuncios";
+import ListarAnuncios from "./anuncios";
 
 // Importar el Hook de verificación de roles
 import useCheckPermissions from "@/hooks/useCheckPermissions";
@@ -65,7 +65,7 @@ export default function GrupoPage() {
 
       <div style={contentStyle}>
         {activeTab === "listar" && <ListarGrupos />}
-        {/* {activeTab === "anuncios" && <AnunciosGrupo />} */}
+        {activeTab === "anuncios" && <ListarAnuncios />}
       </div>
     </div>
   );
