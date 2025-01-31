@@ -20,7 +20,7 @@ exports.obtenerAnunciosById = async (req, res) => {
 
 exports.obtenerAnunciosByGrupo = async (req, res) => {
     try {
-        const anuncios = await anunciosModel.obtenerAnunciosByGrupo(req.params.idCurso);
+        const anuncios = await anunciosModel.obtenerAnunciosByGrupo(req.params.idGrupo);
         res.status(200).json(anuncios);
     } catch (error) {
         res.status(500).json({ error: error.message });

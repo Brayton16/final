@@ -74,13 +74,14 @@ export default function ListarGrupos() {
       try {
         const nuevoAnuncio = {
           idGrupoCurso: grupo.idGrupoCurso,
-          idProfesor: profesor.idProfesor,
+          idProfesor: profesorId,
           titulo: formValues.titulo,
           mensaje: formValues.mensaje,
           fechaPublicacion: new Date().toISOString(),
           autor: `${profesor.nombre} ${profesor.apellido}`,
           importancia: formValues.importancia,
         };
+        console.log("Nuevo anuncio:", nuevoAnuncio);
         await crearAnuncio(nuevoAnuncio);
         toast.success("Anuncio publicado con éxito!");
       } catch (error) {
