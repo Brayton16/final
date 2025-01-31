@@ -1,11 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import AdminNavbar from "@/components/navbar"; // Navbar exclusivo del admin
 
-export const metadata = {
-  title: "Admin Dashboard",
-  description: "Panel administrativo",
-};
-
 export default function AdminLayout({ children }) {
   return (
       <div>

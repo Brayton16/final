@@ -42,7 +42,7 @@ export default function LoginPage() {
               await signOut(auth);
               
             } else if (role === "profesor") {
-              router.push("/dashboard/profesor");
+              router.push("/profesor/dashboard");
             } else if (role === "estudiante") {
               await signOut(auth);
             } 
@@ -90,7 +90,7 @@ export default function LoginPage() {
         userUnauthorized(role);
         await signOut(auth);
       } else if (role === "profesor") {
-        router.push("/dashboard/profesor");
+        router.push("/profesor/dashboard");
       } else if (role === "estudiante") {
         userUnauthorized(role);
         await signOut(auth);

@@ -3,7 +3,6 @@ import apiClient from "./apiClient";
 export const getGruposByProfesor = async (id) => {
   try {
     const response = await apiClient.get(`/grupo-curso/grupos/profesor/${id}`);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error al obtener los grupos del profesor:", error);

@@ -7,17 +7,17 @@ import { signOut } from "firebase/auth";
 
 const ProfesorSidebar = () => {
   const router = useRouter();
-  const pathname = usePathname(); // Obtiene la ruta actual
+  const pathname = usePathname();
 
   const sidebarStyle = {
     height: "100vh",
-    width: "180px", // Cambiado a 180px
+    width: "180px",
     backgroundColor: "#f8f9fa",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between", // Asegura que el contenido y el botón estén separados
+    justifyContent: "space-between",
     padding: "1rem",
-    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)", // Sombra más prominente
+    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
     position: "fixed",
     top: 0,
     left: 0,
@@ -30,7 +30,7 @@ const ProfesorSidebar = () => {
     display: "block",
     color: "#495057",
     textDecoration: "none",
-    transition: "all 0.3s ease", // Animación suave
+    transition: "all 0.3s ease",
   };
 
   const linkActiveStyle = {
@@ -38,6 +38,13 @@ const ProfesorSidebar = () => {
     backgroundColor: "#e9ecef",
     fontWeight: "bold",
   };
+
+  const menuItems = [
+    { path: "/profesor/dashboard", label: "Dashboard" },
+    { path: "/profesor/grupos", label: "Grupos" },
+    { path: "/profesor/asignaciones", label: "Asignaciones" },
+    { path: "/profesor/chats", label: "Chats" },
+  ];
 
   return (
     <div style={sidebarStyle}>
@@ -53,23 +60,12 @@ const ProfesorSidebar = () => {
           <img src="/logo.png" alt="Logo" style={{ width: "80px" }} />
         </div>
         <ul className="list-unstyled">
-          {[
-            //{ path: "/profesor/dashboard", label: "Dashboard" },
-            { path: "/profesor/secciones", label: "Secciones" },
-          ].map((item) => (
+          {menuItems.map((item) => (
             <li key={item.path}>
               <a
-                style={
-                  pathname === item.path
-                    ? { ...linkStyle, ...linkActiveStyle }
-                    : linkStyle
-                }
-                onMouseEnter={(e) =>
-                  (e.target.style.transform = "translateX(5px)")
-                }
-                onMouseLeave={(e) =>
-                  (e.target.style.transform = "translateX(0)")
-                }
+                style={pathname === item.path ? linkActiveStyle : linkStyle}
+                onMouseEnter={(e) => (e.target.style.transform = "translateX(5px)")}
+                onMouseLeave={(e) => (e.target.style.transform = "translateX(0)")}
                 onClick={() => router.push(item.path)}
               >
                 {item.label}
@@ -82,11 +78,10 @@ const ProfesorSidebar = () => {
         className="btn btn-danger w-100"
         onClick={async () => {
           try {
-            // Si estás usando Firebase, cierra sesión
             if (auth.currentUser) {
-              await signOut(auth); // Cierra sesión del usuario
+              await signOut(auth);
             }
-            router.push("/"); // Redirige al login o página principal
+            router.push("/");
           } catch (error) {
             console.error("Error al cerrar sesión:", error.message);
           }
@@ -94,7 +89,6 @@ const ProfesorSidebar = () => {
       >
         Logout
       </button>
-
     </div>
   );
 };
