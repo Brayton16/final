@@ -56,7 +56,7 @@ export default function Chats() {
   if (!conversaciones.length) {
     return (
       <div className="no-conversaciones">
-              <button onClick={() => router.push("/admin/dashboard")} className="regresar-btn"> {/* Esta es la madre mas insegura del mundo, debe haber un modo de fixearlo */}
+              <button onClick={() => router.back()} className="regresar-btn"> {/* router.back() te lleva a la última página visitada antes de esta*/}
         Regresar 
       </button>
         <p>No tienes conversaciones aún.</p>
@@ -70,7 +70,7 @@ export default function Chats() {
 
   return (
     <div className="chats-container">
-      <button onClick={() => router.push("/admin/dashboard")} className="regresar-btn">
+      <button onClick={() => router.back()} className="regresar-btn">
         Regresar 
       </button>
       <h1>Conversaciones</h1>
