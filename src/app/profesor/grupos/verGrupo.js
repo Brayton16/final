@@ -7,6 +7,7 @@ import { getEncargadoById } from "@/services/encargadosService";
 import { getEstudianteById } from "@/services/estudiantesService";
 import {createConversacion} from '../../../services/chatService';
 import { useRouter } from "next/navigation"; 
+import { LuMessageCirclePlus } from "react-icons/lu";
 
 import VerNotasEstudiante from "./verNotasEstudiante"; // Importa la vista de notas
 
@@ -172,7 +173,7 @@ export default function VerGrupo({ grupo, onCancel }) {
                     Ver Notas
                   </button>
                   <button style={actionButtonStyle} onClick={() => sendMessage(estudiante.encargadoId)}>
-                    Enviar mensaje al encargado
+                  <LuMessageCirclePlus />
                   </button>
                 </td>
               </tr>
