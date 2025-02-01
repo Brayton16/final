@@ -47,7 +47,7 @@ export default function Conversacion() {
     };
 
     fetchConversacion();
-    const interval = setInterval(fetchConversacion, 3000); // Auto-refresh cada 3 segundos
+    const interval = setInterval(fetchConversacion, 1000); // Auto-refresh cada 3 segundos
 
     return () => clearInterval(interval); // Limpiar intervalo al desmontar
   }, [conversacionId]);
