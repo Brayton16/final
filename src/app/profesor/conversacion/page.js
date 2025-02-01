@@ -1,23 +1,23 @@
 "use client";
 
 import { useState, useEffect, useRef, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { getConversacionById, sendMessage } from "@/services/chatService";
 import { FaArrowLeft, FaPaperPlane } from "react-icons/fa";
-
 function ConversacionComponent() {
   const [conversacion, setConversacion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mensaje, setMensaje] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const conversacionId = searchParams.get("id");
-  const [userId, setUserId] = useState(null);
+  const pathname = usePathname();
 
-  const chatContainerRef = useRef(null);
+  // Obtiene el estado pasado en router.push()
+  const { idConversacion, receptorNombre } = history.state || {};
+
+  const [userId, setUserId] = useState(null);
   const messagesEndRef = useRef(null);
-  const userAtBottomRef = useRef(true); // Estado para detectar si el usuario está abajo
+  const userAtBottomRef = useRef(true);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
@@ -27,13 +27,12 @@ function ConversacionComponent() {
   }, []);
 
   useEffect(() => {
-    if (!conversacionId) return;
+    if (!idConversacion) return;
 
     const fetchConversacion = async () => {
       try {
-        const data = await getConversacionById(conversacionId);
+        const data = await getConversacionById(idConversacion);
         setConversacion(data);
-
         if (userAtBottomRef.current) {
           hacerScrollAbajo();
         }
@@ -45,19 +44,18 @@ function ConversacionComponent() {
     };
 
     fetchConversacion();
-    const interval = setInterval(fetchConversacion, 3000); // Auto-refresh cada 3s
+    const interval = setInterval(fetchConversacion, 3000);
 
     return () => clearInterval(interval);
-  }, [conversacionId]);
+  }, [idConversacion]);
 
   const handleEnviarMensaje = async (e) => {
     e.preventDefault();
     if (mensaje.trim() === "") return;
 
     try {
-      await sendMessage(conversacionId, mensaje, userId);
+      await sendMessage(idConversacion, mensaje, userId);
       setMensaje("");
-
       if (userAtBottomRef.current) {
         hacerScrollAbajo();
       }
@@ -69,12 +67,6 @@ function ConversacionComponent() {
 
   const hacerScrollAbajo = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleScroll = () => {
-    if (!chatContainerRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-    userAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 20;
   };
 
   if (loading) {

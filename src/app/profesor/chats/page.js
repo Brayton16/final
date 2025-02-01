@@ -52,9 +52,12 @@ export default function Chats() {
     );
   }
 
-  const handleConversacionClick = (id) => {
-    router.push(`/profesor/conversacion?id=${id}`);
+  const handleConversacionClick = (id, receptorNombre) => {
+    router.push(`/profesor/conversacion`, {
+      state: { idConversacion: id, receptorNombre }
+    });
   };
+  
 
   return (
     <div style={chatsContainerStyle}>
