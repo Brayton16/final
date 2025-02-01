@@ -131,7 +131,6 @@ function ConversacionComponent() {
   );
 }
 
-// **📌 Solución: Usamos Suspense para envolver el componente**
 export default function Conversacion() {
   return (
     <Suspense fallback={<div style={loadingStyle}>Cargando conversación...</div>}>
