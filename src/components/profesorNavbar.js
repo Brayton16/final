@@ -43,7 +43,7 @@ const ProfesorSidebar = () => {
     { path: "/profesor/dashboard", label: "Dashboard" },
     { path: "/profesor/grupos", label: "Grupos" },
     { path: "/profesor/asignaciones", label: "Asignaciones" },
-    { path: "/profesor/chats", label: "Chats" },
+    { path: "/chats/chats", label: "Chats" },
   ];
 
   return (

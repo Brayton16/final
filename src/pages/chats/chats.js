@@ -70,7 +70,7 @@ export default function Chats() {
 
   return (
     <div className="chats-container">
-      <button onClick={() => router.back()} className="regresar-btn">
+      <button onClick={() => router.back()} className="regresar-btn"> {/* Se debe modificar para que retorne al dashboard actual */}
         Regresar 
       </button>
       <h1>Conversaciones</h1>
