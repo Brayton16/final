@@ -157,13 +157,9 @@ export default function VerGrupo({ grupo, onCancel }) {
                 <td style={tdStyle}>
                 {estudiante.encargadoCorreo ? (
                   <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      sendMessage(estudiante.encargadoId);
-                    }}
-                    title="Enviar mensaje al encargado" // Esto muestra el texto al pasar el mouse
-                    style={{ color: "#2563eb", textDecoration: "underline", cursor: "pointer" }}
+                    href={`mailto:${estudiante.encargadoCorreo}`}
+                    style={{ color: "#2563eb", textDecoration: "underline" }}
+                    title="Enviar correo al encargado"
                   >
                     {estudiante.encargadoCorreo}
                   </a>
@@ -174,6 +170,9 @@ export default function VerGrupo({ grupo, onCancel }) {
                 <td style={tdStyle}>
                   <button style={actionButtonStyle} onClick={() => setEstudianteSeleccionado(estudiante)}>
                     Ver Notas
+                  </button>
+                  <button style={actionButtonStyle} onClick={() => sendMessage(estudiante.encargadoId)}>
+                    Enviar mensaje al encargado
                   </button>
                 </td>
               </tr>
