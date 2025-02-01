@@ -48,6 +48,7 @@ exports.getAllConversaciones = async (userId) => {
   return conversaciones;
 };
 
+//todo: clean unused code
 exports.getConversacionById = async (id) => {
   const conversacionDoc = await db.collection("conversaciones").doc(id).get();
   if (!conversacionDoc.exists) throw new Error("Conversación no encontrada");
@@ -103,10 +104,22 @@ exports.sendMessage = async (id, mensaje) => {
   return nuevoMensaje;
 };
 
-
 exports.createConversacion = async (data) => {
   const { idEmisor, idReceptor } = data;
 
+  // Buscar si ya existe una conversación entre los dos usuarios
+  const query = db.collection("conversaciones")
+    .where("idEmisor", "in", [idEmisor, idReceptor])
+    .where("idReceptor", "in", [idEmisor, idReceptor]);
+
+  const snapshot = await query.get();
+
+  // Si la conversación ya existe, devolver su ID
+  if (!snapshot.empty) {
+    return { id: snapshot.docs[0].id };
+  }
+
+  // Si no existe, crear una nueva conversación
   const nuevaConversacion = {
     idEmisor,
     idReceptor,
@@ -114,7 +127,8 @@ exports.createConversacion = async (data) => {
   };
 
   const conversacionRef = await db.collection("conversaciones").add(nuevaConversacion);
-  return { id: conversacionRef.id};
+  
+  return { id: conversacionRef.id };
 };
 
 
