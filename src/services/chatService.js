@@ -1,4 +1,4 @@
-import apiClient from "./apiClient"; // Asumiendo que apiClient es un cliente que hace las peticiones
+import apiClient from "./apiClient" // Asumiendo que apiClient es un cliente que hace las peticiones
 
 // Cargar todas las conversaciones
 export const getConversaciones = async (userId) => {

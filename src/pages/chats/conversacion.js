@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getConversacionById, sendMessage } from "../../services/chatService";
+import { getConversacionById, sendMessage } from "@/services/chatService";
 import "./conversacion.css";
 
 export default function Conversacion() {

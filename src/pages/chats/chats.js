@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getConversaciones } from "../../services/chatService";
+import { getConversaciones } from "@/services/chatService";
 import "./chat.css";
 
 export default function Chats() {

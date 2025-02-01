@@ -9,7 +9,7 @@ import { MdOutlineAssignmentInd } from "react-icons/md";
 import { LuMessageCirclePlus } from "react-icons/lu";
 import Swal from "sweetalert2";
 import AsignarEncargado from "./asignar";
-import {createConversacion} from '../../../services/chatService';
+import {createConversacion} from '@/services/chatService';
 import { useRouter } from "next/navigation"; 
 
 export default function ListarEncargados() {
@@ -65,8 +65,8 @@ export default function ListarEncargados() {
     fetchEncargados(); // Refresca la lista
   };
 
-  const handleAsignar = async (id) => {
-    setEncargadoAAsignar(id); // Guarda el ID del encargado a asignar
+  const handleAsignar = async (encargado) => {
+    setEncargadoAAsignar(encargado); // Guarda el ID del encargado a asignar
   };
 
   const handleEscribir = async (encargado) => {
@@ -103,6 +103,16 @@ export default function ListarEncargados() {
       <EditarEncargado
         encargado={encargadoAEditar}
         onCancel={() => setEncargadoAEditar(null)}
+        onSave={handleSave}
+      />
+    );
+  }
+
+  if (encargadoAAsignar) {
+    return (
+      <AsignarEncargado
+        encargado={encargadoAAsignar}
+        onCancel={() => setEncargadoAAsignar(null)}
         onSave={handleSave}
       />
     );

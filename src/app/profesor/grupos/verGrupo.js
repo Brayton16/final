@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { getSeccionById } from "@/services/seccionesService";
 import { getEncargadoById } from "@/services/encargadosService";
 import { getEstudianteById } from "@/services/estudiantesService";
-import {createConversacion} from '../../../services/chatService';
+import {createConversacion} from '@/services/chatService';
 import { useRouter } from "next/navigation"; 
 import { LuMessageCirclePlus } from "react-icons/lu";
 
