@@ -31,7 +31,7 @@ exports.getAllConversaciones = async (userId) => {
     const idReceptor = conversacion.idEmisor === userId ? conversacion.idReceptor : conversacion.idEmisor;
     const receptorSnapshot = await db.collection("administradores").doc(idReceptor).get();
     const receptor = receptorSnapshot.exists ? receptorSnapshot.data() : { nombre: "Usuario desconocido" };
-    const receptorNombre = await obtenerNombrePorUserId(conversacionData.idReceptor);
+    const receptorNombre = await obtenerNombrePorUserId(idReceptor);
 
     // Obtener el último mensaje de la conversación (si existe)
     const ultimoMensaje = conversacion.mensajes && conversacion.mensajes.length > 0
