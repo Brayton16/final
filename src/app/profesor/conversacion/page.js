@@ -43,7 +43,7 @@ export default function Conversacion({ params }) {
     };
 
     fetchConversacion();
-    const interval = setInterval(fetchConversacion, 3000);
+    const interval = setInterval(fetchConversacion, 10000);
 
     return () => clearInterval(interval);
   }, [id]);
