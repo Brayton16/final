@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getConversacionById, sendMessage } from "@/services/chatService";
 import { FaArrowLeft, FaPaperPlane } from "react-icons/fa";
 
-export default function Conversacion() {
+function ConversacionComponent() {
   const [conversacion, setConversacion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +26,6 @@ export default function Conversacion() {
     }
   }, []);
 
-  // Cargar y actualizar la conversación
   useEffect(() => {
     if (!conversacionId) return;
 
@@ -35,7 +34,6 @@ export default function Conversacion() {
         const data = await getConversacionById(conversacionId);
         setConversacion(data);
 
-        // 🔄 Solo hacer scroll si el usuario estaba en el fondo
         if (userAtBottomRef.current) {
           hacerScrollAbajo();
         }
@@ -47,9 +45,9 @@ export default function Conversacion() {
     };
 
     fetchConversacion();
-    const interval = setInterval(fetchConversacion, 1000); // Auto-refresh cada 3 segundos
+    const interval = setInterval(fetchConversacion, 3000); // Auto-refresh cada 3s
 
-    return () => clearInterval(interval); // Limpiar intervalo al desmontar
+    return () => clearInterval(interval);
   }, [conversacionId]);
 
   const handleEnviarMensaje = async (e) => {
@@ -60,7 +58,6 @@ export default function Conversacion() {
       await sendMessage(conversacionId, mensaje, userId);
       setMensaje("");
 
-      // 🟢 Autoscroll solo si el usuario estaba en la parte inferior
       if (userAtBottomRef.current) {
         hacerScrollAbajo();
       }
@@ -70,16 +67,14 @@ export default function Conversacion() {
     }
   };
 
-  // 🔽 **Función para hacer scroll abajo**
   const hacerScrollAbajo = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // 📌 **Detectar si el usuario está en la parte inferior del chat**
   const handleScroll = () => {
     if (!chatContainerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-    userAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 20; // Pequeño margen de seguridad
+    userAtBottomRef.current = scrollHeight - scrollTop <= clientHeight + 20;
   };
 
   if (loading) {
@@ -133,6 +128,15 @@ export default function Conversacion() {
         </button>
       </form>
     </div>
+  );
+}
+
+// **📌 Solución: Usamos Suspense para envolver el componente**
+export default function Conversacion() {
+  return (
+    <Suspense fallback={<div style={loadingStyle}>Cargando conversación...</div>}>
+      <ConversacionComponent />
+    </Suspense>
   );
 }
 
