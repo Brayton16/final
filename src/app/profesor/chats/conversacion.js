@@ -1,15 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { getConversacionById, sendMessage } from "@/services/chatService";
 import { FaArrowLeft, FaPaperPlane } from "react-icons/fa";
 
-export default function Conversacion({ params }) {
-  const router = useRouter();
-  const { id } = params; // Extrae el ID desde los parámetros de la URL
-  const receptorNombre = decodeURIComponent(router.query?.nombre || "Chat");
-
+export default function Conversacion({ id, receptorNombre, onVolver }) {
   const [conversacion, setConversacion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -80,7 +75,7 @@ export default function Conversacion({ params }) {
     return (
       <div style={noConversacionStyle}>
         <p>La conversación no existe.</p>
-        <button onClick={() => router.back()} style={buttonStyle}>Volver atrás</button>
+        <button onClick={onVolver} style={buttonStyle}>Volver atrás</button>
       </div>
     );
   }
@@ -88,13 +83,13 @@ export default function Conversacion({ params }) {
   return (
     <div style={chatContainerStyle}>
       <div style={chatHeaderStyle}>
-        <button onClick={() => router.push("/profesor/chats")} style={backButtonStyle}>
+        <button onClick={onVolver} style={backButtonStyle}>
           <FaArrowLeft size={20} />
         </button>
-        <h2 style={chatTitleStyle}>{conversacion.receptorNombre}</h2>
+        <h2 style={chatTitleStyle}>{receptorNombre}</h2>
       </div>
 
-      <div style={chatMessagesStyle} ref={chatContainerRef} onScroll={handleScroll}>
+      <div style={chatMessagesStyle} ref={messagesEndRef}>
         {conversacion.mensajes.map((mensaje, index) => (
           <div
             key={index}
@@ -121,6 +116,7 @@ export default function Conversacion({ params }) {
     </div>
   );
 }
+
 
 // 🎨 **Estilos**
 

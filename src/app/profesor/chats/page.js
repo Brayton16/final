@@ -4,11 +4,15 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getConversaciones } from "@/services/chatService";
 import { FaArrowLeft } from "react-icons/fa";
+import Conversacion from "./conversacion";
+
 export default function Chats() {
   const [userId, setUserId] = useState(null);
   const [conversaciones, setConversaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [conversacionActiva, setConversacionActiva] = useState(null); // 🔥 Estado para cambiar la vista
+  const [receptorNombre, setReceptorNombre] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -52,12 +56,16 @@ export default function Chats() {
     );
   }
 
-  const handleConversacionClick = (id, receptorNombre) => {
-    router.push(`/profesor/conversacion`, {
-      state: { idConversacion: id, receptorNombre }
-    });
-  };
-  
+  // ✅ Alternar entre la lista de conversaciones y la vista de una conversación
+  if (conversacionActiva) {
+    return (
+      <Conversacion
+        id={conversacionActiva}
+        receptorNombre={receptorNombre}
+        onVolver={() => setConversacionActiva(null)} // 🔥 Volver a la lista de chats
+      />
+    );
+  }
 
   return (
     <div style={chatsContainerStyle}>
@@ -73,7 +81,10 @@ export default function Chats() {
           <div 
             key={conversacion.id} 
             style={chatItemStyle} 
-            onClick={() => handleConversacionClick(conversacion.id)}
+            onClick={() => {
+              setConversacionActiva(conversacion.id);
+              setReceptorNombre(conversacion.receptorNombre);
+            }}
           >
             <div style={avatarStyle}>
               <span style={avatarTextStyle}>{conversacion.receptorNombre[0]}</span>
@@ -92,7 +103,6 @@ export default function Chats() {
 }
 
 // 🎨 Estilos en objetos
-
 const chatsContainerStyle = {
   display: "flex",
   flexDirection: "column",
