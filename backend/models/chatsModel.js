@@ -2,8 +2,6 @@ const db = require("../services/firebase");
 
 exports.getAllConversaciones = async (userId) => {
 
-  console.log("Deploy test");
-
   // Obtener conversaciones donde el usuario es el emisor
   const emisorSnapshot = await db
     .collection("conversaciones")
