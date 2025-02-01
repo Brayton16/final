@@ -33,6 +33,7 @@ export default function VerNotasEstudiante({ estudiante, grupo, onCancel }) {
     fetchData();
   }, [estudiante.id, grupo.idGrupoCurso]);
 
+  
   const calcularNotas = (asignaciones, entregas, curso) => {
     if (!curso) return;
 
@@ -43,9 +44,7 @@ export default function VerNotasEstudiante({ estudiante, grupo, onCancel }) {
       { key: "asistencia", nombre: "Asistencia" }
     ];
 
-    const resultados = [];
-
-    tiposAsignacion.forEach(({ key, nombre }) => {
+    const resultados = tiposAsignacion.map(({ key, nombre }) => {
       const porcentaje = curso[key] || 0;
       const asignacionesTipo = asignaciones.filter((a) => a.tipo === nombre);
       const entregasTipo = entregas.filter((e) => asignacionesTipo.some((a) => a.id === e.idAsignacion));
@@ -53,18 +52,29 @@ export default function VerNotasEstudiante({ estudiante, grupo, onCancel }) {
       let obtenido = 0;
 
       if (asignacionesTipo.length > 0) {
-        const calificaciones = entregasTipo.map((e) => e.calificacion || 0);
-        const promedio = calificaciones.length > 0
-          ? calificaciones.reduce((sum, val) => sum + val, 0) / asignacionesTipo.length
-          : 0;
-        obtenido = (promedio / 100) * porcentaje;
+        const calificaciones = asignacionesTipo.map((asignacion) => {
+          const entrega = entregasTipo.find((e) => e.idAsignacion === asignacion.id);
+          return entrega ? entrega.calificacion : 0;
+        });
+
+        const sumaCalificaciones = calificaciones.reduce((sum, val) => sum + val, 0);
+        const promedio = sumaCalificaciones / asignacionesTipo.length;
+
+        obtenido = (promedio * porcentaje) / 100;
       }
 
-      resultados.push({ tipo: nombre, obtenido, total: porcentaje, asignaciones: asignacionesTipo, entregas: entregasTipo });
+      return { 
+        tipo: nombre, 
+        obtenido, 
+        total: porcentaje, 
+        asignaciones: asignacionesTipo, 
+        entregas: entregasTipo 
+      };
     });
 
     setNotas(resultados);
-  };
+};
+
 
   const calcularNotaFinal = () => {
     return notas.reduce((sum, nota) => sum + nota.obtenido, 0).toFixed(2);
