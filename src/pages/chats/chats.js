@@ -24,6 +24,7 @@ export default function Chats() {
       const fetchConversaciones = async () => {
         try {
           const data = await getConversaciones(userId); 
+          console.log(data);
           setConversaciones(data);
         } catch (error) {
           setError("Error al cargar las conversaciones");

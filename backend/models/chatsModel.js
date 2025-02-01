@@ -1,6 +1,9 @@
 const db = require("../services/firebase");
 
 exports.getAllConversaciones = async (userId) => {
+
+  console.log("Deploy test");
+
   // Obtener conversaciones donde el usuario es el emisor
   const emisorSnapshot = await db
     .collection("conversaciones")
@@ -28,6 +31,7 @@ exports.getAllConversaciones = async (userId) => {
     const idReceptor = conversacion.idEmisor === userId ? conversacion.idReceptor : conversacion.idEmisor;
     const receptorSnapshot = await db.collection("administradores").doc(idReceptor).get();
     const receptor = receptorSnapshot.exists ? receptorSnapshot.data() : { nombre: "Usuario desconocido" };
+    const receptorNombre = await obtenerNombrePorUserId(conversacionData.idReceptor);
 
     // Obtener el último mensaje de la conversación (si existe)
     const ultimoMensaje = conversacion.mensajes && conversacion.mensajes.length > 0
@@ -36,7 +40,7 @@ exports.getAllConversaciones = async (userId) => {
 
     return {
       ...conversacion,
-      receptorNombre: receptor.nombre,
+      receptorNombre: receptorNombre,
       ultimoMensaje: ultimoMensaje,
     };
   }));
@@ -52,8 +56,6 @@ exports.getConversacionById = async (id) => {
   const conversacionData = conversacionDoc.data();
 
   // Obtener el nombre del emisor
-
-  
 
   const emisorDoc = await db.collection("administradores").doc(conversacionData.idEmisor).get();
   //const emisorNombre = emisorDoc.exists ? emisorDoc.data().nombre : "Usuario desconocido";
