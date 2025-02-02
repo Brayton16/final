@@ -36,6 +36,16 @@ exports.obtenerEntregaById = async (req, res) => {
     }
 };
 
+exports.getEntregasPorProfesor = async (req, res) => {
+    try {
+      const resultado = await entregasModel.getEntregasPorProfesor(req.params.idProfesor);
+      res.status(200).json(resultado);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
+
 exports.crearEntrega = async (req, res) => {
     const { idAsignacion, idEstudiante, fechaEntrega, estado, calificacion, observaciones, archivo } = req.body;
     try {

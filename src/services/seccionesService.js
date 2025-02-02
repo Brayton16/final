@@ -10,6 +10,16 @@ export const getSecciones = async () => {
   }
 }
 
+export const getCantidadEstudiantesPorSeccion = async () => {
+  try {
+    const response = await apiClient.get("/seccion/estudiantes-por-seccion");
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener la cantidad de estudiantes por sección:", error);
+    throw error;
+  }
+}
+
 export const getSeccionById = async (id) => {
   try {
     const response = await apiClient.get(`/seccion/${id}`);

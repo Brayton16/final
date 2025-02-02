@@ -27,6 +27,17 @@ exports.getProfesoresByEspecialidad = async (req, res) => {
   }
 };
 
+
+exports.getCantidadProfesoresPorEspecialidad = async (req, res) => {
+  try {
+    const profesoresPorEspecialidad = await profesoresModel.getCantidadProfesoresPorEspecialidad();
+    res.status(200).json(profesoresPorEspecialidad);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 exports.createProfesor = async (req, res) => {
   const { nombre, apellido, correo, telefono, especialidad } = req.query;
   try {
@@ -83,3 +94,4 @@ exports.deleteProfesor = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+

@@ -70,3 +70,47 @@ exports.calificarEntrega = async (id, nuevaCalificacion, retroalimentacion) => {
     });
     return { id, nuevaCalificacion, retroalimentacion };
 };
+
+
+exports.getEntregasPorProfesor = async (idProfesor) => {
+    try {
+      // Obtener asignaciones del profesor
+      const asignacionesSnapshot = await db.collection("asignaciones").where("idProfesor", "==", idProfesor).get();
+      if (asignacionesSnapshot.empty) return [];
+  
+      let resultado = [];
+  
+      for (const asignacionDoc of asignacionesSnapshot.docs) {
+        const idAsignacion = asignacionDoc.id;
+        const titulo = asignacionDoc.data().titulo;
+  
+        // Obtener entregas de la asignación
+        const entregasSnapshot = await db.collection("entregas").where("idAsignacion", "==", idAsignacion).get();
+        let entregas = [];
+  
+        for (const entregaDoc of entregasSnapshot.docs) {
+          const { calificacion } = entregaDoc.data();
+          const calificacionNum = Number(calificacion); // Convertir a número
+  
+          // Determinar estado
+          let estado = "Malo";
+          if (calificacionNum > 95) estado = "Excelente";
+          else if (calificacionNum > 80) estado = "Bueno";
+          else if (calificacionNum > 65) estado = "Regular";
+  
+          entregas.push({
+            idEntrega: entregaDoc.id,
+            calificacion: calificacionNum,
+            estado,
+          });
+        }
+  
+        resultado.push({ idAsignacion, titulo, entregas });
+      }
+  
+      return resultado;
+    } catch (error) {
+      console.error("Error al obtener entregas por profesor:", error);
+      throw error;
+    }
+  };

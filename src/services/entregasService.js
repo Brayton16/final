@@ -19,6 +19,12 @@ export const getEntregasByEstudiante = async (idEstudiante) => {
     const response = await apiClient.get(`/entregas/estudiante/${idEstudiante}`);
     return response.data;
 };
+
+export const getEntregasByProfesor = async (idProfesor) => {
+    const response = await apiClient.get(`/entregas/profesor/${idProfesor}`);
+    return response.data;
+}
+
 export const createEntrega = async (entrega) => {
     const response = await apiClient.post("/entregas", entrega);
     return response.data;

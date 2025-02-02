@@ -4,6 +4,7 @@ const seccionController = require('../controllers/seccionController');
 
 
 router.get("/", seccionController.getSeccion);
+router.get('/estudiantes-por-seccion', seccionController.getCantidadEstudiantesPorSeccion);
 router.get("/:id", seccionController.getSeccionById);
 router.get("/estudiantes/:id", seccionController.getEstudiantesBySeccion);
 router.get("/seccion/:idEstudiante", seccionController.getSeccionByEstudiante);

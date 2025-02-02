@@ -62,6 +62,50 @@ exports.getSeccionByEstudiante = async (idEstudiante) => {
   }
 };
 
+exports.getCantidadEstudiantesPorSeccion = async () => {
+  try {
+    // Obtener todas las secciones desde la colección "seccion"
+    const seccionesSnapshot = await db.collection("seccion").get();
+
+    if (seccionesSnapshot.empty) {
+      return {
+        success: true,
+        message: "No hay secciones registradas.",
+        data: [],
+      };
+    }
+
+    const resultado = [];
+
+    // Recorrer cada documento de la colección "seccion"
+    seccionesSnapshot.forEach((doc) => {
+      const seccionData = doc.data();
+      const nombreSeccion = `${seccionData.nivel} - ${seccionData.grupo}`;
+      const cantidadEstudiantes = seccionData.listaEstudiantes
+        ? seccionData.listaEstudiantes.length
+        : 0;
+
+      resultado.push({
+        seccion: nombreSeccion,
+        cantidad: cantidadEstudiantes,
+      });
+    });
+
+    return {
+      success: true,
+      message: "Consulta exitosa",
+      data: resultado,
+    };
+  } catch (error) {
+    console.error("Error al obtener la cantidad de estudiantes por sección:", error);
+    return {
+      success: false,
+      message: "Error al obtener los datos",
+      error: error.message,
+    };
+  }
+};
+
 
 exports.getEstudiantesBySeccion = async (idSeccion) => {
   try {

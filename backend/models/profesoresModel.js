@@ -16,6 +16,48 @@ exports.getProfesoresByEspecialidad = async (especialidad) => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+
+exports.getCantidadProfesoresPorEspecialidad = async () => {
+  try {
+    const profesoresSnapshot = await db.collection("profesores").get();
+
+    if (profesoresSnapshot.empty) {
+      return {
+        success: false,
+        message: "No hay profesores registrados",
+        data: [],
+      };
+    }
+
+    const especialidadesMap = {};
+
+    profesoresSnapshot.forEach((doc) => {
+      const { especialidad } = doc.data();
+      if (especialidad) {
+        especialidadesMap[especialidad] = (especialidadesMap[especialidad] || 0) + 1;
+      }
+    });
+
+    const resultado = Object.keys(especialidadesMap).map((especialidad) => ({
+      especialidad,
+      cantidad: especialidadesMap[especialidad],
+    }));
+
+    return {
+      success: true,
+      message: "Consulta exitosa",
+      data: resultado,
+    };
+  } catch (error) {
+    console.error("Error al obtener profesores por especialidad:", error.message);
+    return {
+      success: false,
+      message: "Error en la consulta",
+      data: [],
+    };
+  }
+};
+
 exports.createProfesor = async (data) => {
   const { nombre, apellido, correo, telefono, especialidad, password } = data;
 

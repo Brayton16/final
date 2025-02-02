@@ -2,55 +2,131 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
-import { auth } from "../../../services/firebase";
-import AdminNavbar from "@/components/navbar";
-
-// Importar el Hook de verificación de roles
+import { Bar } from "react-chartjs-2";
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import useCheckPermissions from "@/hooks/useCheckPermissions";
+import { getCantidadProfesoresPorEspecialidad } from "@/services/profesoresService";
+import { getCantidadEstudiantesPorSeccion } from "@/services/seccionesService";
 
-//TODO: Hacer estadisticas de todo el sistema aqui
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function AdminDashboard() {
-  // Llama al Hook de verificación de roles
-  useCheckPermissions(["admin"]); 
-
-  const [user, setUser] = useState(null);
+  useCheckPermissions(["admin"]);
   const router = useRouter();
 
+  const [profesoresPorEspecialidad, setProfesoresPorEspecialidad] = useState({});
+  const [estudiantesPorSeccion, setEstudiantesPorSeccion] = useState({});
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        // Obtén el token y verifica su expiración
-        const tokenResult = await getIdTokenResult(currentUser);
-        const now = Date.now() / 1000; // Tiempo actual en segundos
+    fetchProfesoresPorEspecialidad();
+    fetchEstudiantesPorSeccion();
+  }, []);
 
-        if (tokenResult.expirationTime < now) {
-          // Si el token ha expirado
-          auth.signOut(); // Cierra sesión
-          router.push("/"); // Redirige al login
-        } else {
-          // Si el token es válido
-          setUser(currentUser); // Guarda el usuario en el estado
-        }
-      } else {
-        router.push("/"); // Redirige al login si no hay sesión
+  // Obtener cantidad de profesores por especialidad
+  const fetchProfesoresPorEspecialidad = async () => {
+    try {
+      const response = await getCantidadProfesoresPorEspecialidad();
+      const { success, data } = response;
+
+      if (success) {
+        const especialidades = data.reduce((acc, item) => {
+          acc[item.especialidad] = item.cantidad;
+          return acc;
+        }, {});
+        setProfesoresPorEspecialidad(especialidades);
       }
-    });
+    } catch (error) {
+      console.error("Error obteniendo datos de profesores:", error);
+    }
+  };
 
-    return () => unsubscribe();
-  }, [router]);
+  // Obtener cantidad de estudiantes por sección
+  const fetchEstudiantesPorSeccion = async () => {
+    try {
+      const response = await getCantidadEstudiantesPorSeccion();
+      const { success, data } = response;
+
+      if (success) {
+        const secciones = data.reduce((acc, item) => {
+          acc[item.seccion] = item.cantidad;
+          return acc;
+        }, {});
+        setEstudiantesPorSeccion(secciones);
+      }
+    } catch (error) {
+      console.error("Error obteniendo datos de estudiantes:", error);
+    }
+  };
+
+  if (
+    !Object.keys(profesoresPorEspecialidad).length ||
+    !Object.keys(estudiantesPorSeccion).length
+  ) {
+    return <div>Cargando...</div>;
+  }
 
   return (
     <div>
       <h1>Admin Dashboard</h1>
-      <div>
-        <button onClick={() => router.push("/admin/profesores")}>Profesores</button>
-        <button onClick={() => router.push("/admin/encargados")}>Encargados</button>
-        <button onClick={() => router.push("/admin/estudiantes")}>Estudiantes</button>
-        <button onClick={() => router.push("/admin/grupos")}>Grupos</button>
-        <button onClick={() => router.push("/admin/cursos")}>Cursos</button>
-        <button onClick={() => router.push("/profesor/cursos")}>Cursos(Vista Profesor)</button>
+
+      {/* Gráfico: Profesores por Especialidad */}
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "20px", marginTop: "2rem" }}>
+      <div style={{ flex: "1 1 45%", maxWidth: "800px", minWidth: "300px" }}>
+        <h2>Profesores por Especialidad</h2>
+        <Bar
+          data={{
+            labels: Object.keys(profesoresPorEspecialidad),
+            datasets: [
+              {
+                label: "Cantidad de Profesores",
+                data: Object.values(profesoresPorEspecialidad),
+                backgroundColor: "rgba(54, 162, 235, 0.6)",
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: true, text: "Profesores por Especialidad" },
+            },
+          }}
+        />
+      </div>
+      </div>
+
+      {/* 🆕 Gráfico: Estudiantes por Sección */}
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "20px", marginTop: "2rem" }}>
+      <div style={{ flex: "1 1 45%", maxWidth: "800px", minWidth: "300px", marginTop: "30px" }}>
+        <h2>Estudiantes por Sección</h2>
+        <Bar
+          data={{
+            labels: Object.keys(estudiantesPorSeccion),
+            datasets: [
+              {
+                label: "Cantidad de Estudiantes",
+                data: Object.values(estudiantesPorSeccion),
+                backgroundColor: "rgba(255, 99, 132, 0.6)",
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: true, text: "Estudiantes por Sección" },
+            },
+          }}
+        />
+      </div>
       </div>
     </div>
   );

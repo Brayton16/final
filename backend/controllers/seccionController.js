@@ -18,6 +18,15 @@ exports.getSeccionById = async (req, res) => {
   }
 };
 
+exports.getCantidadEstudiantesPorSeccion = async (req, res) => {
+  try {
+    const resultado = await seccionModel.getCantidadEstudiantesPorSeccion();
+    res.status(200).json(resultado);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.getSeccionByEstudiante = async (req, res) => {
   try {
     const seccion = await seccionModel.getSeccionByEstudiante(req.params.idEstudiante);
